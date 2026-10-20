@@ -32,6 +32,10 @@ const slides = [
     img: bg3, pos: '50% 50%',
   },
 ];
+
+// Divide el título en líneas (por <br />) para animarlas una a una con máscara
+const lines = (t: string) =>
+  t.split(/<br\s*\/?>/i).map((l, k) => `<span class="ln"><span class="li" style="--k:${k}">${l.trim()}</span></span>`).join('');
 ---
 <section class="slider" aria-roledescription="carrusel" aria-label="Destacados de ARMODENT" data-slider>
   <div class="track">
@@ -41,10 +45,10 @@ const slides = [
           <Image src={s.img} alt="" widths={[768, 1280, 1920]} sizes="100vw" loading={i === 0 ? 'eager' : 'lazy'} />
         </div>
         <div class="in wrap">
-          <p class="eyebrow">{s.eyebrow}</p>
-          {i === 0 ? <h1 set:html={s.title} /> : <h2 class="h" set:html={s.title} />}
-          <p class="txt">{s.text}</p>
-          <div class="ctas">
+          <p class="eyebrow rv">{s.eyebrow}</p>
+          {i === 0 ? <h1 set:html={lines(s.title)} /> : <h2 class="h" set:html={lines(s.title)} />}
+          <p class="txt rv">{s.text}</p>
+          <div class="ctas rv">
             <a href={s.cta.href} class="btn btn-primary" tabindex={i === 0 ? 0 : -1}>{s.cta.label} <Icon name="arrow" size={14} /></a>
             <a href={s.alt.href} class="btn btn-ghost" tabindex={i === 0 ? 0 : -1}>{s.alt.label} <Icon name="arrow" size={12} /></a>
           </div>
@@ -84,8 +88,23 @@ const slides = [
   .dots button { width: 34px; height: 4px; border: 0; padding: 0; border-radius: 2px; background: rgb(251 241 236 / .35); cursor: pointer; transition: background .25s, width .25s; }
   .dots button.on { background: var(--rosa-nude); width: 52px; }
   .dots button:focus-visible, .nav:focus-visible { outline: 2px solid var(--rosa-nude); outline-offset: 3px; }
+
+  /* ── Animaciones de entrada del texto (se reproducen cada vez que una diapositiva se activa) ── */
+  :global(.slider) { --ease: cubic-bezier(.22, .8, .24, 1); }
+  .ln { display: block; overflow: hidden; padding-bottom: .14em; margin-bottom: -.14em; }
+  .li { display: block; transform: translateY(112%); opacity: 0; }
+  .rv { opacity: 0; transform: translateY(18px); }
+  .slide.on .li { animation: lineUp 1.05s var(--ease) both; animation-delay: calc(.35s + var(--k) * .16s); }
+  .slide.on .eyebrow.rv { animation: eyebrowIn 1s var(--ease) .1s both; }
+  .slide.on .txt.rv { animation: fadeUp .95s var(--ease) .95s both; }
+  .slide.on .ctas.rv { animation: fadeUp .95s var(--ease) 1.2s both; }
+  .slide.on .in :global(em) { background: linear-gradient(105deg, var(--rosa-palido) 42%, #fff 50%, var(--rosa-palido) 58%) 100% 0 / 260% 100% no-repeat; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: sheen 2.2s ease-in-out 1.15s both; }
+  @keyframes lineUp { from { transform: translateY(112%); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes eyebrowIn { from { opacity: 0; transform: translateY(10px); letter-spacing: .34em; } to { opacity: 1; transform: none; letter-spacing: inherit; } }
+  @keyframes sheen { from { background-position: 100% 0; } to { background-position: 0 0; } }
   @media (max-width: 700px) { .nav { display: none; } .in { padding-block: 56px 88px; } .txt { font-size: 1.05rem; } .track { min-height: 560px; } }
-  @media (prefers-reduced-motion: reduce) { .slide { transition: none; } .bg :global(img) { transition: none; transform: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .li, .rv { opacity: 1 !important; transform: none !important; animation: none !important; } .slide.on .in :global(em) { animation: none; background: none; -webkit-text-fill-color: currentColor; } .slide { transition: none; } .bg :global(img) { transition: none; transform: none !important; } }
 </style>
 
 <script>

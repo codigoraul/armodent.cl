@@ -27,7 +27,7 @@ const grupos = categorias.map((c, i) => ({ ...c, n: `0${i + 1}`, tono: tonos[c.i
 <style>
   .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .tile { --pad: clamp(24px, 3vw, 36px); --borde: 12px; display: flex; flex-direction: column; padding: var(--pad); border-radius: 14px; color: var(--tinta); }
-  .tile.nude { background: var(--rosa-nude); } .tile.palido { background: var(--rosa-palido); } .tile.arena { background: #e3dfdc; }
+  .tile.nude { background: var(--rosa-nude); } .tile.palido { background: var(--rosa-palido); } .tile.arena { background: #ead6c3; }
   .top { position: relative; margin: calc(var(--borde) - var(--pad)) calc(var(--borde) - var(--pad)) 28px; }
   .n { position: absolute; top: 14px; left: 22px; z-index: 1; font: italic 400 3rem/1 var(--f-titulo); color: #fff; text-shadow: 0 2px 14px rgb(58 42 38 / .45); }
   .foto { width: 100%; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; }
