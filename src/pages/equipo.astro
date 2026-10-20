@@ -1,0 +1,58 @@
+---
+import Page from '../layouts/Page.astro';
+import PageHero from '../components/PageHero.astro';
+import Media from '../components/Media.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { equipo } from '../data/equipo';
+
+const fotos = import.meta.glob<{ default: ImageMetadata }>('../assets/equipo/*.{jpg,jpeg,png,webp}', { eager: true });
+const tonos = ['nude', 'palido', 'gris'] as const;
+const iniciales = (n: string) => n.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
+const lista = equipo.map((p, i) => ({
+  ...p,
+  tono: tonos[i % tonos.length],
+  img: p.foto ? fotos[`../assets/equipo/${p.foto}`]?.default : undefined,
+}));
+---
+<Page title="Equipo · ARMODENT" description="Conoce al equipo de ARMODENT: profesionales de odontología y estética facial que te acompañan en cada etapa." current="equipo">
+  <PageHero
+    eyebrow="Equipo"
+    title="Las personas que <em>te cuidan.</em>"
+    lead="Un equipo de profesionales de odontología y estética facial que trabaja en conjunto, con una atención que empieza por escucharte."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Equipo' }]}
+  />
+
+  <section class="section">
+    <div class="wrap">
+      <div class="grid">
+        {lista.map((p) => (
+          <article class="card reveal">
+            <div class={`foto ${p.tono}`}>
+              {p.img
+                ? <Media src={p.img} alt={p.nombre} sizes="(max-width: 700px) 90vw, 380px" />
+                : <span class="ini" aria-hidden="true">{iniciales(p.nombre)}</span>}
+            </div>
+            <p class="eyebrow">{p.cargo}</p>
+            <h3>{p.nombre}</h3>
+            <p class="bio">{p.bio}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Page>
+
+<style>
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .card { display: flex; flex-direction: column; }
+  .foto { aspect-ratio: 4 / 5; border-radius: 12px; overflow: hidden; display: grid; place-items: center; margin-bottom: 22px; }
+  .foto.nude { background: var(--rosa-nude); } .foto.palido { background: var(--rosa-palido); } .foto.gris { background: #e3dfdc; }
+  .foto :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }
+  .ini { font: italic 400 4.2rem/1 var(--f-titulo); color: rgb(58 42 38 / .5); }
+  .eyebrow { margin-bottom: 8px; }
+  h3 { font-size: 1.9rem; margin-bottom: 10px; }
+  .bio { color: var(--tinta-suave); max-width: 38ch; }
+  @media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+</style>

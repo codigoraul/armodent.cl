@@ -1,0 +1,8 @@
+---
+import { Image } from 'astro:assets';
+const { src, alt = '', class: cls = '', sizes, loading = 'lazy', width, height } = Astro.props;
+const remote = typeof src === 'string';
+---
+{remote
+  ? <img src={src} alt={alt} class={cls} loading={loading} decoding="async" width={width} height={height} />
+  : <Image src={src} alt={alt} class={cls} sizes={sizes} loading={loading} widths={[480, 768, 1100]} />}

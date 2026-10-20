@@ -1,0 +1,77 @@
+---
+import Page from '../layouts/Page.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import clinica from '../assets/clinica.jpg';
+
+const valores = [
+  { n: '01', t: 'Escucha primero', d: 'Cada consulta empieza por tu historia, tus dudas y lo que esperas. Sin apuro y sin guion.', tono: 'nude' },
+  { n: '02', t: 'Mirada integral', d: 'La salud de tu boca y la armonía de tu rostro se piensan juntas, no por separado.', tono: 'palido' },
+  { n: '03', t: 'Información clara', d: 'Te explicamos hallazgos, opciones, etapas y cuidados con palabras simples.', tono: 'arena' },
+  { n: '04', t: 'Calidez y serenidad', d: 'Un entorno tranquilo, de tonos suaves y madera clara, pensado para que te sientas bien desde que llegas.', tono: 'nude' },
+];
+---
+<Page title="La clínica · ARMODENT" description="Conoce ARMODENT: una clínica de odontología y estética facial que parte por escucharte, con una mirada integral y un espacio cálido." current="clinica">
+  <PageHero
+    eyebrow="La clínica"
+    title="Un lugar donde puedes sentirte <em>en confianza.</em>"
+    lead="ARMODENT reúne odontología y estética facial en un espacio cálido y sereno, con una atención que empieza por escucharte."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'La clínica' }]}
+    image={clinica}
+  />
+
+  <section class="section">
+    <div class="wrap dos">
+      <div class="reveal">
+        <p class="eyebrow">Quiénes somos</p>
+        <h2 class="section-title">Salud, bienestar y armonía.<br />Sin dejar de ser tú.</h2>
+      </div>
+      <div class="texto reveal">
+        <p>Creemos que cuidar una sonrisa es cuidar a una persona. Por eso, antes de proponer cualquier tratamiento, conversamos: queremos entender tu historia, tus inquietudes y lo que esperas de tu visita.</p>
+        <p>Trabajamos con una mirada integral. La odontología y la estética facial comparten un mismo punto de partida, que es tu bienestar, y por eso las pensamos en conjunto. Cada propuesta se explica con claridad y se decide a tu ritmo.</p>
+        <p>Nuestro espacio refleja esa forma de cuidar: una recepción luminosa, de muros en tonos cálidos y madera clara, donde la idea es que llegues con tranquilidad.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="valores">
+    <div class="wrap">
+      <header class="reveal"><p class="eyebrow">Cómo nos gusta trabajar</p><h2 class="section-title">Cuatro ideas que guían<br />cada visita.</h2></header>
+      <div class="grid">
+        {valores.map((v) => <article class={`v ${v.tono} reveal`}><span class="n">{v.n}</span><h3>{v.t}</h3><p>{v.d}</p></article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section area">
+    <div class="wrap dos">
+      <div class="reveal"><p class="eyebrow">Qué hacemos</p><h2 class="section-title">Odontología y estética facial,<br />bajo un mismo techo.</h2></div>
+      <div class="texto reveal">
+        <p>Desde el cuidado preventivo y las especialidades odontológicas hasta la valoración de estética facial, reunimos en un solo lugar las áreas que acompañan la salud y la armonía de tu rostro.</p>
+        <div class="links">
+          <a href="/servicios/" class="btn btn-primary">Ver todos los servicios <Icon name="arrow" size={14} /></a>
+          <a href="/tu-primera-visita/" class="btn btn-ghost">Cómo es tu primera visita <Icon name="arrow" size={12} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Page>
+
+<style>
+  .dos { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(32px, 7vw, 110px); align-items: start; }
+  .dos .eyebrow { margin-bottom: 18px; }
+  .texto { display: grid; gap: 18px; max-width: 58ch; } .texto p { color: var(--tinta-suave); font-size: 1.08rem; }
+  .links { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; margin-top: 8px; }
+  .valores { background: var(--nude-suave); padding-block: clamp(64px, 9vw, 110px); }
+  .valores header { margin-bottom: 48px; } .valores .eyebrow { margin-bottom: 16px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .v { padding: 28px 26px 32px; border-radius: 14px; min-height: 280px; display: flex; flex-direction: column; }
+  .v.nude { background: var(--rosa-nude); } .v.palido { background: var(--rosa-palido); } .v.arena { background: var(--beige-arena); }
+  .n { font: italic 400 2.8rem/1 var(--f-titulo); color: rgb(58 42 38 / .5); margin-bottom: auto; padding-bottom: 36px; }
+  .v h3 { font-size: 1.65rem; margin-bottom: 10px; } .v p { color: #4a322d; font-size: 15.5px; }
+  @media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 900px) { .dos { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .v { min-height: 0; } }
+</style>

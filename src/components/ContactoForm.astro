@@ -1,0 +1,106 @@
+---
+import Icon from './Icon.astro';
+import { getAjustes, getServicios, contactEndpoint } from '../lib/wp';
+import { waLink, telLink } from '../lib/contact';
+const a = await getAjustes();
+const servicios = await getServicios();
+const motivos = [{ v: 'Primera visita / valoración', slug: 'primera-visita' }, ...servicios.map((s) => ({ v: s.title, slug: s.slug })), { v: 'Otro motivo', slug: 'otro' }];
+const wa = waLink(a); const tel = telLink(a);
+const datos = [
+  { icon: 'pin', t: 'Dónde encontrarnos', v: a.direccion || 'Dirección de la clínica · por confirmar' },
+  { icon: 'phone', t: 'Contacto directo', v: a.telefono || a.whatsapp || 'Teléfono / WhatsApp · por confirmar', href: wa || tel },
+  { icon: 'clock', t: 'Horario de atención', v: a.horario || 'Días y horarios · por confirmar' },
+];
+---
+<section class="section contacto" id="formulario">
+  <div class="wrap grid">
+    <div class="info reveal">
+      <p class="eyebrow">Escríbenos</p>
+      <h2 class="section-title">Cuéntanos qué necesitas.</h2>
+      <p class="lede">Déjanos tu motivo de consulta y te contactaremos para coordinar tu primera visita.</p>
+      <ul>
+        {datos.map((d) => (
+          <li>
+            <span class="ic"><Icon name={d.icon} size={22} /></span>
+            <div><strong>{d.t}</strong>{d.href ? <a href={d.href}>{d.v}</a> : <span>{d.v}</span>}</div>
+          </li>
+        ))}
+      </ul>
+      {wa && <a href={wa} class="btn btn-outline" rel="noopener">Escribir por WhatsApp</a>}
+    </div>
+
+    <form class="form reveal" id="form-contacto" novalidate data-endpoint={contactEndpoint}>
+      <div class="form-head"><h3>Solicita tu cita</h3></div>
+      <div class="row">
+        <label>Nombre<input name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" required /></label>
+        <label>Teléfono<input name="telefono" type="tel" autocomplete="tel" placeholder="Tu número de contacto" required /></label>
+      </div>
+      <label>Correo electrónico<input name="email" type="email" autocomplete="email" placeholder="Tu correo electrónico" required /></label>
+      <label>Motivo de consulta
+        <select name="motivo" required>
+          <option value="" disabled selected>Selecciona un servicio</option>
+          {motivos.map((m) => <option value={m.v} data-slug={m.slug}>{m.v}</option>)}
+        </select>
+      </label>
+      <label>¿En qué podemos ayudarte?<textarea name="mensaje" rows="4" placeholder="Cuéntanos brevemente tu consulta"></textarea></label>
+      <label class="hp" aria-hidden="true">No completar<input name="web" type="text" tabindex="-1" autocomplete="off" /></label>
+      <label class="check"><input type="checkbox" name="consentimiento" required /><span>Acepto que ARMODENT use estos datos solo para responder mi consulta y coordinar mi cita.</span></label>
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">Solicitar mi cita <Icon name="arrow" size={14} /></button>
+        <p class="status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .contacto { background: linear-gradient(180deg, var(--fondo), var(--nude-suave)); }
+  .grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
+  .info .eyebrow { margin-bottom: 18px; } .info .lede { margin-top: 22px; }
+  ul { margin: 40px 0 32px; display: grid; gap: 22px; }
+  li { display: flex; gap: 16px; align-items: flex-start; }
+  .ic { color: var(--terracota); margin-top: 2px; }
+  li strong { display: block; font-weight: 500; font-size: 15.5px; }
+  li span, li a { color: var(--tinta-suave); font-size: 15px; } li a:hover { color: var(--terracota-hover); text-decoration: underline; }
+  .form { background: var(--blanco-rosado); border: 1px solid var(--linea); border-radius: 8px; padding: clamp(24px, 4vw, 44px); display: grid; gap: 18px; box-shadow: 0 30px 60px -40px rgb(138 90 79 / 0.5); }
+  .form-head h3 { font-size: 1.9rem; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  label { display: grid; gap: 7px; font-size: 13.5px; font-weight: 500; color: var(--tinta); }
+  input, select, textarea { font: 400 16px/1.4 var(--f-texto); color: var(--tinta); background: #fff; border: 1px solid #dcc3b9; border-radius: 4px; padding: 14px; width: 100%; transition: border-color .2s, box-shadow .2s; }
+  input::placeholder, textarea::placeholder { color: #9a8079; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--terracota); box-shadow: 0 0 0 3px rgb(196 116 106 / 0.2); }
+  input[aria-invalid='true'], select[aria-invalid='true'] { border-color: #b3261e; }
+  textarea { resize: vertical; min-height: 112px; }
+  .hp { position: absolute; left: -9999px; }
+  .check { display: flex; gap: 12px; align-items: flex-start; font-weight: 400; font-size: 13px; color: var(--tinta-suave); }
+  .check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--terracota-profundo); flex: none; }
+  .actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .status { font-size: 14px; color: var(--tinta-suave); } .status.ok { color: #2f6b45; } .status.err { color: #b3261e; }
+  button[disabled] { opacity: .6; cursor: wait; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .row { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const form = document.getElementById('form-contacto') as HTMLFormElement;
+  const pre = new URLSearchParams(location.search).get('motivo');
+  if (pre) { const o = form.querySelector<HTMLOptionElement>(`option[data-slug="${CSS.escape(pre)}"]`); if (o) (o.parentElement as HTMLSelectElement).value = o.value; }
+  const status = form.querySelector('.status') as HTMLElement;
+  const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
+  const say = (msg: string, cls: 'ok' | 'err' | '') => { status.textContent = msg; status.className = `status ${cls}`; };
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fields = [...form.querySelectorAll<HTMLInputElement>('[required]')];
+    let bad: HTMLInputElement | null = null;
+    fields.forEach((f) => { const ok = f.type === 'checkbox' ? f.checked : f.checkValidity() && f.value.trim() !== ''; f.setAttribute('aria-invalid', String(!ok)); if (!ok && !bad) bad = f; });
+    if (bad) { (bad as HTMLInputElement).focus(); say('Revisa los campos marcados.', 'err'); return; }
+    const endpoint = form.dataset.endpoint;
+    if (!endpoint) { say('El formulario aún no está conectado. Por favor contáctanos por teléfono o WhatsApp.', 'err'); return; }
+    btn.disabled = true; say('Enviando…', '');
+    try {
+      const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
+      if (!res.ok) throw new Error(String(res.status));
+      form.reset(); say('¡Gracias! Recibimos tu consulta y te contactaremos pronto.', 'ok');
+    } catch { say('No pudimos enviar tu mensaje. Inténtalo nuevamente en unos minutos.', 'err'); }
+    finally { btn.disabled = false; }
+  });
+</script>

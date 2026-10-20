@@ -1,0 +1,150 @@
+---
+import Icon from './Icon.astro';
+import { getServicios, getAjustes } from '../lib/wp';
+import { waLink, telLink } from '../lib/contact';
+import { categorias } from '../data/fallback';
+const { current = 'inicio' } = Astro.props;
+const todos = await getServicios();
+const aj = await getAjustes();
+const tel = telLink(aj); const wa = waLink(aj);
+const redes = [aj.instagram && { l: 'Instagram', h: aj.instagram }, aj.facebook && { l: 'Facebook', h: aj.facebook }].filter(Boolean) as { l: string; h: string }[];
+const grupos = categorias.map((c) => ({ ...c, items: todos.filter((s) => s.categoria === c.id) }));
+const nav = [
+  { id: 'inicio', href: '/', label: 'Inicio' },
+  { id: 'clinica', href: '/la-clinica/', label: 'La clínica' },
+  { id: 'servicios', href: '/servicios/', label: 'Servicios', menu: true },
+  { id: 'equipo', href: '/equipo/', label: 'Equipo' },
+  { id: 'contacto', href: '/contacto/', label: 'Contacto' },
+];
+---
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <p>Un espacio para tu salud, tu sonrisa y tu bienestar</p>
+    <div class="topbar-right">
+      {tel && <a href={tel} class="tb-item"><Icon name="phone" size={13} /> {aj.telefono}</a>}
+      {wa && <a href={wa} class="tb-item" target="_blank" rel="noopener">WhatsApp</a>}
+      {redes.map((r) => <a href={r.h} class="tb-item" target="_blank" rel="noopener">{r.l}</a>)}
+      <a href="/contacto/" class="tb-cta">Hablemos de tu próxima visita <Icon name="arrow" size={11} /></a>
+    </div>
+  </div>
+</div>
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="/" class="logo" aria-label="Armodent · Odontología y estética facial, inicio">
+      <img src="/logo-armodent.svg" alt="Armodent — Odontología y estética facial" width="281" height="59" />
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <ul>
+        {nav.map((n) => (
+          <li class:list={{ 'has-menu': n.menu }}>
+            <a href={n.href} class:list={['nav-link', { active: n.id === current }]} aria-current={n.id === current ? 'page' : undefined}>{n.label}</a>
+            {n.menu && (
+              <div class="mega"><div class="panel">
+                {grupos.map((g) => (
+                  <div>
+                    <p class="eyebrow">{g.title}</p>
+                    <ul>{g.items.map((s) => <li><a href={`/servicios/${s.slug}/`}>{s.title}</a></li>)}</ul>
+                  </div>
+                ))}
+              </div></div>
+            )}
+          </li>
+        ))}
+      </ul>
+      <a href="/contacto/" class="btn btn-primary">Reservar cita <Icon name="arrow" size={14} /></a>
+    </nav>
+    <button class="burger" aria-expanded="false" aria-controls="menu-movil" aria-label="Abrir menú"><span></span><span></span></button>
+  </div>
+  <div class="menu-movil" id="menu-movil" inert>
+   <div class="mm-in">
+    <ul class="wrap">
+      {nav.map((n) => n.menu ? (
+        <li>
+          <details>
+            <summary>{n.label}<Icon name="plus" size={16} /></summary>
+            <div class="sub">
+              <a href={n.href}>Ver todos los servicios</a>
+              {grupos.map((g) => <><p class="eyebrow">{g.title}</p>{g.items.map((s) => <a href={`/servicios/${s.slug}/`}>{s.title}</a>)}</>)}
+            </div>
+          </details>
+        </li>
+      ) : <li><a href={n.href}>{n.label}</a></li>)}
+      <li><a href="/contacto/" class="btn btn-primary">Reservar cita <Icon name="arrow" size={14} /></a></li>
+    </ul>
+   </div>
+  </div>
+</header>
+
+<style>
+  .topbar { background: var(--rosa-nude); border-bottom: 1px solid rgb(58 42 38 / .12); font-size: 13px; color: var(--tinta); letter-spacing: .01em; }
+  .topbar-in { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 9px; }
+  .topbar-right { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 6px 22px; }
+  .tb-cta { padding-left: 22px; border-left: 1px solid rgb(58 42 38 / .25); }
+  .topbar-right > a:first-child.tb-cta { padding-left: 0; border-left: 0; }
+  .topbar a { display: inline-flex; align-items: center; gap: 8px; color: var(--tinta); font-weight: 500; }
+  .topbar a:hover { color: var(--tinta); text-decoration: underline; text-underline-offset: 3px; }
+  .site-header { position: sticky; top: 0; z-index: 50; background: rgb(253 246 243 / 0.94); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; transition: border-color .25s, box-shadow .25s; }
+  .site-header.scrolled { border-color: var(--linea); box-shadow: 0 6px 24px rgb(138 90 79 / 0.08); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 14px; }
+  .logo img { height: 54px; width: auto; }
+  .nav { display: flex; align-items: center; gap: 34px; }
+  .nav > ul { display: flex; gap: 30px; }
+  .nav > ul > li { position: relative; }
+  .nav-link { display: inline-block; font-size: 16px; color: var(--tinta); padding-block: 6px; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
+  .nav-link:hover, .nav-link.active { color: var(--terracota-hover); border-color: currentColor; }
+  .nav .btn { padding: 17px 24px; }
+  .nav .btn-primary { background: #E2A9B4; color: #3A1F2B; font-weight: 500; text-shadow: none; }
+  .nav .btn-primary:hover { background: #8C4F63; color: #FFF4F0; }
+  .mega { position: absolute; top: 100%; left: 50%; padding-top: 20px; transform: translate(-50%, 8px); opacity: 0; visibility: hidden; transition: opacity .2s, transform .2s, visibility .2s; z-index: 5; }
+  .has-menu:hover .mega, .has-menu:focus-within .mega { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+  .panel { display: grid; grid-template-columns: repeat(3, auto); gap: 40px; padding: 28px 34px; background: var(--fondo); border: 1px solid var(--linea); border-radius: 8px; box-shadow: 0 30px 60px -30px rgb(138 90 79 / 0.45); white-space: nowrap; }
+  .panel .eyebrow { margin-bottom: 12px; font-size: 11.5px; }
+  .panel ul { display: grid; gap: 2px; }
+  .panel li a { display: block; padding: 6px 0; font-size: 15px; color: var(--tinta); }
+  .panel li a:hover { color: var(--terracota-hover); }
+  .burger { display: none; width: 44px; height: 44px; border: 1px solid var(--linea); border-radius: 4px; background: transparent; cursor: pointer; position: relative; }
+  .burger span { position: absolute; left: 12px; right: 12px; height: 1.5px; background: var(--tinta); transition: transform .25s, top .25s; }
+  .burger span:first-child { top: 17px; } .burger span:last-child { top: 25px; }
+  .burger[aria-expanded='true'] span:first-child { top: 21px; transform: rotate(45deg); }
+  .burger[aria-expanded='true'] span:last-child { top: 21px; transform: rotate(-45deg); }
+  .menu-movil { position: absolute; top: 100%; left: 0; right: 0; z-index: 60; display: grid; grid-template-rows: 0fr; background: var(--fondo); border-top: 1px solid transparent; visibility: hidden; box-shadow: 0 34px 50px -26px rgb(31 23 21 / .45);
+    transition: grid-template-rows .5s cubic-bezier(.22, .8, .24, 1), border-color .3s ease, visibility 0s linear .5s; }
+  .menu-movil.open { grid-template-rows: 1fr; border-top-color: var(--linea); visibility: visible; transition-delay: 0s; }
+  .mm-in { overflow: hidden; min-height: 0; }
+  .mm-in > ul { max-height: calc(100dvh - 120px); overflow-y: auto; overscroll-behavior: contain; }
+  .menu-movil li { opacity: 0; transform: translateY(-8px); transition: opacity .25s ease, transform .25s ease; }
+  .menu-movil.open li { opacity: 1; transform: none; transition: opacity .45s ease, transform .5s cubic-bezier(.22, .8, .24, 1); }
+  .menu-movil.open li:nth-child(1) { transition-delay: .08s; } .menu-movil.open li:nth-child(2) { transition-delay: .13s; }
+  .menu-movil.open li:nth-child(3) { transition-delay: .18s; } .menu-movil.open li:nth-child(4) { transition-delay: .23s; }
+  .menu-movil.open li:nth-child(5) { transition-delay: .28s; } .menu-movil.open li:nth-child(6) { transition-delay: .33s; }
+  .menu-movil summary :global(svg) { transition: transform .3s ease; }
+  .menu-movil details[open] summary :global(svg) { transform: rotate(45deg); }
+  .menu-movil details::details-content { block-size: 0; overflow: hidden; transition: block-size .4s cubic-bezier(.22, .8, .24, 1), content-visibility .4s allow-discrete; }
+  .menu-movil details[open]::details-content { block-size: auto; }
+  :global(:root) { interpolate-size: allow-keywords; }
+  @media (min-width: 1041px) { .menu-movil { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .menu-movil, .menu-movil li, .menu-movil summary :global(svg), .menu-movil details::details-content { transition: none !important; } }
+  .menu-movil .mm-in > ul { display: grid; gap: 2px; padding-block: 12px 40px; }
+  .menu-movil li > a:not(.btn), .menu-movil summary { display: flex; justify-content: space-between; align-items: center; padding: 17px 0; font: 400 1.4rem/1.2 var(--f-titulo); border-bottom: 1px solid var(--linea); cursor: pointer; list-style: none; }
+  .menu-movil summary::-webkit-details-marker { display: none; }
+  .menu-movil .sub { display: grid; padding: 10px 0 18px 16px; }
+  .menu-movil .sub a { padding: 11px 0; font-size: 16px; color: var(--tinta-suave); }
+  .menu-movil .sub .eyebrow { margin-top: 16px; }
+  .menu-movil .btn { margin-top: 24px; width: 100%; justify-content: center; padding-block: 19px; }
+  @media (max-width: 1040px) {
+    .nav { display: none; } .burger { display: block; }
+    .logo img { height: 42px; }
+    .topbar p { display: none; } .topbar-in { justify-content: flex-end; }
+    .tb-cta { display: none; }
+  }
+</style>
+
+<script>
+  const header = document.querySelector('.site-header') as HTMLElement;
+  const burger = document.querySelector('.burger') as HTMLButtonElement;
+  const menu = document.getElementById('menu-movil') as HTMLElement;
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+  const setMenu = (open: boolean) => { burger.setAttribute('aria-expanded', String(open)); burger.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú'); menu.classList.toggle('open', open); if (open) menu.removeAttribute('inert'); else menu.setAttribute('inert', ''); };
+  burger.addEventListener('click', () => setMenu(!menu.classList.contains('open')));
+</script>

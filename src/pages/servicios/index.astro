@@ -1,0 +1,78 @@
+---
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import Media from '../../components/Media.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getServicios } from '../../lib/wp';
+import { categorias } from '../../data/fallback';
+import { imagenCategoria, imagenDeServicio } from '../../lib/images';
+const todos = await getServicios();
+const tonos = { odontologia: 'nude', ortodoncia: 'palido', estetica: 'arena' } as const;
+const grupos = categorias.map((c, i) => ({ ...c, tono: tonos[c.id], items: todos.filter((s) => s.categoria === c.id), src: imagenCategoria[c.id], n: `0${i + 1}` }));
+---
+<Page title="Servicios · ARMODENT" description="Odontología general, ortodoncia, ortodoncia invisible, rehabilitación oral, implantología, cirugía bucomaxilofacial, TTM y medicina estética en ARMODENT." current="servicios">
+  <PageHero
+    eyebrow="Servicios"
+    title="Distintas necesidades.<br /><em>Una misma forma de cuidar.</em>"
+    lead="Desde la prevención hasta la atención especializada: conoce las áreas que forman parte de ARMODENT."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios' }]}
+  />
+
+  {grupos.map((g) => (
+    <section class="section grupo" id={g.id}>
+      <div class="wrap">
+        <header class="gh reveal">
+          <div class="gt">
+            <span class="gn">{g.n}</span>
+            <div><p class="eyebrow">{g.eyebrow}</p><h2 class="section-title">{g.title}</h2><p class="lede">{g.excerpt}</p></div>
+          </div>
+          <div class={`foto ${g.tono}`}><Media src={g.src} alt="" sizes="200px" /></div>
+        </header>
+        <div class={`cards n${g.items.length}`}>
+          {g.items.map((s, i) => { const im = imagenDeServicio(s.slug, g.id); return (
+            <a href={`/servicios/${s.slug}/`} class="card reveal">
+              <div class="ph" style={`--cpos:${im.pos};--cz:${im.zoom ?? 1}`}><Media src={im.src} alt="" sizes="(max-width: 600px) 90vw, 380px" /></div>
+              <div class="body">
+                <span class="k">0{i + 1}</span>
+                <h3>{s.title}</h3>
+                <p>{s.excerpt}</p>
+                <span class="go">Conocer más <Icon name="arrow" size={13} /></span>
+              </div>
+            </a>
+          ); })}
+        </div>
+      </div>
+    </section>
+  ))}
+  <p class="wrap nota">La indicación de cada tratamiento requiere una evaluación clínica individual.</p>
+  <CtaBand titulo="¿No sabes por dónde empezar?<br />Te orientamos." texto="Cuéntanos qué te preocupa y te ayudamos a elegir el primer paso." />
+</Page>
+
+<style>
+  .grupo + .grupo { padding-top: 0; }
+  .gh { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; margin-bottom: 36px; }
+  .gt { display: flex; gap: 28px; align-items: flex-start; }
+  .gn { font: italic 400 4rem/.9 var(--f-titulo); color: var(--terracota); }
+  .gt .eyebrow { margin-bottom: 10px; } .gt .lede { margin-top: 12px; }
+  .foto { width: 150px; aspect-ratio: .85; border-radius: 999px 999px 10px 10px; overflow: hidden; flex: none; }
+  .foto :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .cards.n4 { grid-template-columns: repeat(4, 1fr); }
+  .cards.n5 { grid-template-columns: repeat(6, 1fr); }
+  .n5 .card { grid-column: span 2; } .n5 .card:nth-child(n+4) { grid-column: span 3; }
+  .card { display: flex; flex-direction: column; background: #fffaf7; border-radius: 6px; overflow: hidden; color: var(--tinta); box-shadow: 0 1px 0 rgb(138 75 64 / .08), 0 14px 34px -24px rgb(58 42 38 / .35); transition: transform .3s, box-shadow .3s; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 1px 0 rgb(138 75 64 / .1), 0 30px 50px -28px rgb(58 42 38 / .45); }
+  .ph { aspect-ratio: 16 / 10; overflow: hidden; background: var(--nude-suave); }
+  .ph :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: var(--cpos, 50% 50%); transform: scale(var(--cz, 1)); transform-origin: var(--cpos, 50% 50%); transition: transform .6s ease; filter: saturate(.92); }
+  .card:hover .ph :global(img) { transform: scale(calc(var(--cz, 1) * 1.05)); }
+  .body { display: flex; flex-direction: column; flex: 1; padding: 22px 24px 22px; }
+  .n5 .card:nth-child(n+4) .ph { aspect-ratio: 21 / 9; }
+  .k { font: italic 400 1.1rem/1 var(--f-titulo); color: var(--cobre-texto); margin-bottom: 10px; }
+  .card h3 { font-size: 1.6rem; margin-bottom: 8px; } .card p { color: var(--tinta-suave); font-size: 15px; max-width: 36ch; }
+  .go { margin-top: auto; padding-top: 18px; display: inline-flex; align-items: center; gap: 10px; font-weight: 500; font-size: 14.5px; color: var(--cobre-texto); }
+  .card:hover .go { color: var(--tinta); }
+  .nota { margin-block: 8px 72px; font-size: 14px; color: var(--tinta-suave); }
+  @media (max-width: 1000px) { .cards, .cards.n4, .cards.n5 { grid-template-columns: repeat(2, 1fr); } .n5 .card, .n5 .card:nth-child(n+4) { grid-column: auto; } .foto { display: none; } }
+  @media (max-width: 600px) { .cards, .cards.n4, .cards.n5 { grid-template-columns: 1fr; } .gt { flex-direction: column; gap: 12px; } }
+</style>

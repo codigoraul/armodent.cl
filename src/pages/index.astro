@@ -1,0 +1,117 @@
+---
+import Page from '../layouts/Page.astro';
+import Icon from '../components/Icon.astro';
+import Media from '../components/Media.astro';
+import Ticker from '../components/Ticker.astro';
+import Categorias from '../components/Categorias.astro';
+import Faqs from '../components/Faqs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import HeroSlider from '../components/HeroSlider.astro';
+import clinica from '../assets/clinica.jpg';
+import estetica from '../assets/estetica-facial.jpg';
+
+const principios = [
+  { n: '01', t: 'Primero te escuchamos', d: 'Tu historia y tus inquietudes son el punto de partida.' },
+  { n: '02', t: 'Una mirada integral', d: 'Salud oral y armonía facial, pensadas en conjunto.' },
+  { n: '03', t: 'Decides con información', d: 'Opciones, etapas y cuidados explicados sin prisa.' },
+];
+const pasos = [
+  { n: '01', t: 'Nos escribes', d: 'Completas el formulario con tu motivo de consulta y te contactamos.' },
+  { n: '02', t: 'Te evaluamos', d: 'Revisamos tu caso con calma y, si hace falta, pedimos estudios.' },
+  { n: '03', t: 'Trazamos un plan', d: 'Te explicamos opciones, etapas y cuidados para que decidas tú.' },
+];
+---
+<Page title="ARMODENT · Odontología y estética facial" description="Odontología y estética facial en un espacio cálido, donde primero te escuchamos. Conoce nuestros servicios y reserva tu primera valoración." current="inicio">
+  <HeroSlider />
+
+  <Ticker />
+
+  <section class="section">
+    <div class="wrap">
+      <header class="head reveal">
+        <div><p class="eyebrow">Servicios</p><h2 class="section-title">Tres formas<br />de cuidarte.</h2></div>
+        <p class="lede">Cada área reúne tratamientos pensados para necesidades distintas. Elige por dónde empezar.</p>
+      </header>
+      <Categorias />
+      <p class="note">La indicación de cada tratamiento requiere una evaluación clínica individual.</p>
+    </div>
+  </section>
+
+  <section class="clinica">
+    <div class="wrap cgrid">
+      <div class="foto reveal"><div class="arch"><Media src={clinica} alt="Recepción de la clínica, con muro beige y mostrador de mármol" sizes="(max-width: 900px) 90vw, 480px" /></div></div>
+      <div class="txt reveal">
+        <p class="eyebrow">Nuestra forma de cuidar</p>
+        <h2 class="section-title">Un espacio que ya se siente cálido.</h2>
+        <p>Creemos que la atención empieza antes del tratamiento: en cómo te recibimos, cómo te escuchamos y cuánto tiempo te damos para entender cada paso.</p>
+        <ul class="princ">
+          {principios.map((p) => <li><span>{p.n}</span><div><strong>{p.t}</strong><p>{p.d}</p></div></li>)}
+        </ul>
+        <a href="/la-clinica/" class="btn btn-outline">Conocer la clínica <Icon name="arrow" size={14} /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section pasos">
+    <div class="wrap">
+      <header class="head reveal">
+        <div><p class="eyebrow">Tu primera visita</p><h2 class="section-title">Empezar es más simple<br />de lo que parece.</h2></div>
+        <a href="/tu-primera-visita/" class="btn btn-ghost">Cómo es tu primera visita <Icon name="arrow" size={12} /></a>
+      </header>
+      <ol>
+        {pasos.map((p) => <li class="reveal"><span class="n">{p.n}</span><h3>{p.t}</h3><p>{p.d}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="estetica">
+    <div class="wrap egrid">
+      <div class="etxt reveal">
+        <p class="eyebrow">Estética facial</p>
+        <h2 class="section-title">Realzar tu expresión,<br />respetando tu esencia.</h2>
+        <p>Una mirada individual que considera tus rasgos, tus expectativas y tu bienestar, sin promesas de resultados idénticos entre personas.</p>
+        <a href="/servicios/medicina-estetica/" class="btn btn-outline">Conocer medicina estética <Icon name="arrow" size={14} /></a>
+        <small>Cada procedimiento está sujeto a valoración e indicación profesional.</small>
+      </div>
+      <div class="efoto reveal"><div class="arch"><Media src={estetica} alt="Paciente con expresión serena" sizes="(max-width: 900px) 80vw, 420px" /></div></div>
+    </div>
+  </section>
+
+  <Faqs limit={4} titulo="Antes de venir,<br />hablemos." />
+  <CtaBand />
+</Page>
+
+<style>
+  /* Secciones */
+  .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; margin-bottom: 52px; }
+  .head .eyebrow { margin-bottom: 18px; } .head .lede { max-width: 32ch; font-size: 1.05rem; }
+  .note { margin-top: 40px; font-size: 14px; color: var(--tinta-suave); }
+  .clinica { background: var(--nude-suave); padding-block: clamp(64px, 9vw, 120px); }
+  .cgrid { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(32px, 7vw, 110px); align-items: center; }
+  .arch { aspect-ratio: .84; max-width: 480px; border-radius: 999px 999px 10px 10px; overflow: hidden; background: var(--rosa-nude); }
+  .arch :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .clinica .arch :global(img) { object-position: 12% 50%; }
+  .txt { display: grid; gap: 22px; max-width: 56ch; } .txt > p { color: var(--tinta-suave); }
+  .princ { display: grid; gap: 0; margin: 4px 0 8px; }
+  .princ li { display: flex; gap: 20px; align-items: baseline; padding: 16px 0; border-top: 1px solid var(--linea); }
+  .princ li:last-child { border-bottom: 1px solid var(--linea); }
+  .princ span { font: italic 400 1.5rem/1 var(--f-titulo); color: var(--terracota); }
+  .princ strong { font: 400 1.3rem/1.2 var(--f-titulo); display: block; } .princ p { color: var(--tinta-suave); font-size: 15px; margin-top: 2px; }
+  .txt .btn { justify-self: start; }
+  .pasos ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .pasos li { border-top: 1px solid var(--rosa-cobre); padding-top: 22px; }
+  .n { font: italic 400 2.2rem/1 var(--f-titulo); color: var(--terracota); display: block; margin-bottom: 18px; }
+  .pasos h3 { font-size: 1.8rem; margin-bottom: 10px; } .pasos li p { color: var(--tinta-suave); max-width: 32ch; }
+  .estetica { background: var(--rosa-palido); padding-block: clamp(56px, 8vw, 110px); }
+  .egrid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
+  .etxt { display: grid; gap: 22px; max-width: 54ch; } .etxt .eyebrow { color: #5a3a33; } .etxt > p { color: #4a322d; }
+  .etxt .btn { justify-self: start; } .etxt small { font-size: 12.5px; color: #5a3a33; }
+  .efoto { display: flex; justify-content: center; } .efoto .arch { width: min(100%, 400px); aspect-ratio: .86; background: var(--blanco-rosado); box-shadow: 0 34px 70px -34px rgb(58 42 38 / .45); outline: 1px solid rgb(58 42 38 / .35); outline-offset: 12px; }
+  @media (max-width: 960px) {
+    .grid, .cgrid, .egrid { grid-template-columns: 1fr; }
+    .art { min-height: 0; justify-content: center; padding-bottom: 60px; } .a1 { width: min(100%, 360px); } .a2 { width: 130px; left: 4%; bottom: 40px; border-width: 5px; } .card { right: 0; width: 240px; }
+    .head { flex-direction: column; align-items: flex-start; }
+    .pasos ol { grid-template-columns: 1fr; gap: 32px; }
+    .efoto { order: -1; }
+  }
+</style>

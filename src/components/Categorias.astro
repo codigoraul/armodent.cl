@@ -1,0 +1,43 @@
+---
+import Icon from './Icon.astro';
+import Media from './Media.astro';
+import { getServicios } from '../lib/wp';
+import { categorias } from '../data/fallback';
+import { imagenCategoria } from '../lib/images';
+const todos = await getServicios();
+const tonos = { odontologia: 'nude', ortodoncia: 'palido', estetica: 'arena' } as const;
+const grupos = categorias.map((c, i) => ({ ...c, n: `0${i + 1}`, tono: tonos[c.id], items: todos.filter((s) => s.categoria === c.id), src: imagenCategoria[c.id] }));
+---
+<div class="tiles">
+  {grupos.map((g) => (
+    <article class={`tile ${g.tono} reveal`}>
+      <div class="top">
+        <span class="n">{g.n}</span>
+        <div class="foto"><Media src={g.src} alt="" sizes="(max-width: 960px) 90vw, 420px" /></div>
+      </div>
+      <p class="eyebrow">{g.eyebrow}</p>
+      <h3>{g.title}</h3>
+      <p class="ex">{g.excerpt}</p>
+      <ul class="pills">{g.items.map((s) => <li><a href={`/servicios/${s.slug}/`}>{s.title.replace(/ ·.*/, '')}</a></li>)}</ul>
+      <a href={`/servicios/#${g.id}`} class="more">Ver {g.title.toLowerCase()} <Icon name="arrow" size={13} /></a>
+    </article>
+  ))}
+</div>
+<style>
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .tile { --pad: clamp(24px, 3vw, 36px); --borde: 12px; display: flex; flex-direction: column; padding: var(--pad); border-radius: 14px; color: var(--tinta); }
+  .tile.nude { background: var(--rosa-nude); } .tile.palido { background: var(--rosa-palido); } .tile.arena { background: #e3dfdc; }
+  .top { position: relative; margin: calc(var(--borde) - var(--pad)) calc(var(--borde) - var(--pad)) 28px; }
+  .n { position: absolute; top: 14px; left: 22px; z-index: 1; font: italic 400 3rem/1 var(--f-titulo); color: #fff; text-shadow: 0 2px 14px rgb(58 42 38 / .45); }
+  .foto { width: 100%; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; }
+  .foto :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .eyebrow { color: #5a3a33; font-size: 11.5px; margin-bottom: 8px; }
+  h3 { font-size: 2.15rem; }
+  .ex { margin-top: 12px; color: #4a322d; max-width: 32ch; }
+  .pills { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 28px; }
+  .pills a { display: inline-block; padding: 10px 18px; border: 1px solid rgb(58 42 38 / .35); border-radius: 999px; font-size: 16px; transition: background .2s, color .2s, border-color .2s; }
+  .pills a:hover { background: var(--tinta); border-color: var(--tinta); color: var(--blanco-rosado); }
+  .more { margin-top: auto; display: inline-flex; align-items: center; gap: 10px; font-weight: 500; font-size: 15px; border-bottom: 1px solid currentColor; align-self: flex-start; padding-bottom: 3px; }
+  .more:hover { color: var(--terracota-hover); }
+  @media (max-width: 960px) { .tiles { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,11 @@
+---
+import Base from './Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+const { title, description, current } = Astro.props;
+---
+<Base title={title} description={description}>
+  <Header current={current} />
+  <main id="contenido"><slot /></main>
+  <Footer />
+</Base>

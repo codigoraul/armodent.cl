@@ -1,0 +1,65 @@
+---
+import { getAjustes, getServicios } from '../lib/wp';
+import { waLink, telLink } from '../lib/contact';
+const a = await getAjustes();
+const servicios = await getServicios();
+const destacados = ['odontologia-general', 'ortodoncia', 'rehabilitacion-oral', 'medicina-estetica'].map((s) => servicios.find((x) => x.slug === s)).filter(Boolean) as typeof servicios;
+const year = new Date().getFullYear();
+const redes = [a.instagram && { l: 'Instagram', h: a.instagram }, a.facebook && { l: 'Facebook', h: a.facebook }].filter(Boolean) as { l: string; h: string }[];
+const wa = waLink(a); const tel = telLink(a);
+const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.email;
+---
+<footer class="footer">
+  <div class="wrap grid">
+    <div class="marca">
+      <img src="/logo-armodent.svg" alt="Armodent — Odontología y estética facial" width="281" height="59" />
+      <p class="lema">Salud, bienestar y armonía.<br />Sin dejar de ser tú.</p>
+      <a href="/contacto/" class="reservar">Reservar mi primera cita <span aria-hidden="true">→</span></a>
+    </div>
+    <nav aria-label="Sitio">
+      <h4 class="eyebrow">Sitio</h4>
+      <ul><li><a href="/">Inicio</a></li><li><a href="/la-clinica/">La clínica</a></li><li><a href="/servicios/">Servicios</a></li><li><a href="/equipo/">Equipo</a></li><li><a href="/contacto/">Contacto</a></li></ul>
+    </nav>
+    <nav aria-label="Servicios destacados">
+      <h4 class="eyebrow">Cuidado integral</h4>
+      <ul>{destacados.map((s) => <li><a href={`/servicios/${s.slug}/`}>{s.title}</a></li>)}</ul>
+    </nav>
+    {!hayContacto && (
+      <div>
+        <h4 class="eyebrow">Contacto</h4>
+        <ul><li><a href="/contacto/">Escríbenos</a></li><li><a href="/tu-primera-visita/">Cómo es tu primera visita</a></li></ul>
+      </div>
+    )}
+    {hayContacto && (
+      <div>
+        <h4 class="eyebrow">Contacto</h4>
+        <ul class="datos">
+          {a.direccion && <li>{a.direccion}</li>}
+          {a.horario && <li>{a.horario}</li>}
+          {a.telefono && <li><a href={tel}>{a.telefono}</a></li>}
+          {a.whatsapp && <li><a href={wa} rel="noopener">WhatsApp</a></li>}
+        </ul>
+      </div>
+    )}
+  </div>
+  <div class="wrap legal">
+    <p>© {year} ARMODENT · Odontología y estética facial</p>
+    {redes.length > 0 && <p>{redes.map((r, i) => <><a href={r.h} rel="noopener" target="_blank">{r.l}</a>{i < redes.length - 1 ? ' · ' : ''}</>)}</p>}
+  </div>
+</footer>
+<style>
+  .footer { position: relative; background: linear-gradient(180deg, #f8eee9 0%, #f1e1d8 100%); padding-top: clamp(56px, 7vw, 96px); color: var(--tinta); }
+  .footer::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 1px; background: linear-gradient(90deg, transparent, var(--rosa-cobre) 20%, var(--rosa-cobre) 80%, transparent); opacity: .55; }
+  .grid { display: grid; grid-template-columns: 1.5fr 0.8fr 1fr 1fr; gap: clamp(28px, 4vw, 56px); padding-bottom: clamp(40px, 5vw, 64px); }
+  .marca img { height: 59px; width: auto; }
+  .lema { font: italic 400 1.5rem/1.35 var(--f-titulo); color: var(--tinta); margin-top: 24px; max-width: 24ch; }
+  .reservar { display: inline-flex; gap: 8px; align-items: center; margin-top: 22px; font-size: 14.5px; font-weight: 500; color: var(--cobre-texto); border-bottom: 1px solid currentColor; padding-bottom: 3px; }
+  .reservar:hover { color: var(--tinta); }
+  h4 { margin-bottom: 18px; color: var(--cobre-texto); font-family: var(--f-texto); font-size: 11.5px; letter-spacing: .18em; }
+  ul { display: grid; gap: 11px; font-size: 15.5px; color: var(--tinta); }
+  li a { transition: color .2s; } li a:hover { color: var(--cobre-texto); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .legal { border-top: 1px solid rgb(138 75 64 / 0.2); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 24px; font-size: 13px; color: var(--tinta-suave); }
+  .legal a:hover { color: var(--cobre-texto); text-decoration: underline; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } .marca { grid-column: 1 / -1; } }
+  @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
+</style>

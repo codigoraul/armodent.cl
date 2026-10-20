@@ -1,0 +1,39 @@
+---
+import Media from './Media.astro';
+import Swash from './Swash.astro';
+import HeroBg from './HeroBg.astro';
+const { eyebrow, title, lead, crumbs = [], image, tone = 'nude' } = Astro.props;
+---
+<section class:list={['phero', 'dark-hero', tone]}>
+  <HeroBg />
+  <Swash class="swash" />
+  <div class:list={['wrap', 'grid', { solo: !image }]}>
+    <div class="copy">
+      {crumbs.length > 0 && (
+        <nav class="crumbs" aria-label="Ruta">
+          {crumbs.map((c, i) => <>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}{i < crumbs.length - 1 && <span>/</span>}</>)}
+        </nav>
+      )}
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1 set:html={title} />
+      {lead && <p class="lead">{lead}</p>}
+      <slot />
+    </div>
+    {image && (
+      <div class="visual"><div class="arch"><Media src={image} alt="" sizes="(max-width: 900px) 80vw, 460px" loading="eager" /></div></div>
+    )}
+  </div>
+</section>
+<style>
+  .phero { position: relative; overflow: hidden; background: #1f1715; }
+  .phero :global(.swash) { display: none; }
+  .grid { display: grid; grid-template-columns: 1fr; padding-block: clamp(22px, 2.8vw, 38px); position: relative; z-index: 1; }
+  .copy { display: grid; gap: 8px; align-content: center; }
+  .crumbs { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; margin-bottom: 2px; }
+  .crumbs a:hover { text-decoration: underline; }
+  .eyebrow { margin-bottom: -2px; font-size: 11.5px; }
+  h1 { font-size: clamp(1.9rem, 3.4vw, 2.8rem); line-height: 1.1; letter-spacing: -0.012em; max-width: 30ch; }
+  .copy :global(h1 em) { font-style: normal; }
+  .lead { font-size: 1.02rem; max-width: 62ch; }
+  .visual { display: none; }
+</style>

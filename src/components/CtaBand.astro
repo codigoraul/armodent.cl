@@ -1,0 +1,34 @@
+---
+import Icon from './Icon.astro';
+import Swash from './Swash.astro';
+import { getAjustes } from '../lib/wp';
+import { waLink } from '../lib/contact';
+const a = await getAjustes();
+const wa = waLink(a);
+const { titulo = 'Demos el primer paso<br />hacia tu cuidado.', texto = 'Una conversación puede ser el comienzo. Cuéntanos qué necesitas.' } = Astro.props;
+---
+<section class="cta">
+  <Swash class="swash" />
+  <div class="wrap in">
+    <div>
+      <p class="eyebrow">Tu bienestar, el punto de partida</p>
+      <h2 set:html={titulo} />
+      <p class="sub">{texto}</p>
+    </div>
+    <div class="btns">
+      <a href="/contacto/" class="btn btn-light">Quiero reservar una cita <Icon name="arrow" size={14} /></a>
+      {wa && <a href={wa} class="btn btn-line" rel="noopener">Escribir por WhatsApp</a>}
+    </div>
+  </div>
+</section>
+<style>
+  .cta { position: relative; overflow: hidden; background: var(--cafe-oscuro); color: var(--blanco-rosado); padding-block: clamp(56px, 8vw, 100px); }
+  .cta :global(.swash) { position: absolute; right: -4%; top: 14px; width: 52%; height: 80px; color: var(--rosa-cobre); opacity: .4; }
+  .in { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
+  .eyebrow { color: var(--rosa-nude); margin-bottom: 16px; }
+  h2 { color: var(--blanco-rosado); font-size: clamp(2.1rem, 4.4vw, 3.6rem); }
+  .sub { margin-top: 16px; color: #e3cfc7; }
+  .btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-line { border-color: var(--rosa-nude); color: var(--rosa-nude); }
+  .btn-line:hover { background: var(--rosa-nude); color: var(--cafe-oscuro); }
+</style>

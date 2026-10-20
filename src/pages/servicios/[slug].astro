@@ -1,0 +1,177 @@
+---
+import Page from '../../layouts/Page.astro';
+import Media from '../../components/Media.astro';
+import Icon from '../../components/Icon.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import HeroBg from '../../components/HeroBg.astro';
+import { getServicios } from '../../lib/wp';
+import { categorias } from '../../data/fallback';
+import { imagenCategoria, imagenDeServicio, servicioHref } from '../../lib/images';
+
+export async function getStaticPaths() {
+  const todos = await getServicios();
+  return todos.map((s) => ({ params: { slug: s.slug }, props: { s, todos } }));
+}
+const { s, todos } = Astro.props;
+const cat = categorias.find((c) => c.id === s.categoria)!;
+const hermanos = todos.filter((x) => x.categoria === s.categoria);
+const otros = todos.filter((x) => x.categoria !== s.categoria);
+const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
+---
+<Page title={`${s.title} · ARMODENT`} description={s.excerpt} current="servicios">
+    <section class="hero dark-hero">
+      <HeroBg />
+      <div class="wrap grid">
+        <div class="copy">
+          <nav class="crumbs" aria-label="Ruta">
+            <a href="/">Inicio</a><span>/</span><a href="/servicios/">Servicios</a><span>/</span><span aria-current="page">{s.title}</span>
+          </nav>
+          <p class="eyebrow">{cat.title} · {cat.eyebrow}</p>
+          <h1>{s.title}</h1>
+          <p class="lead">{s.lead}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cuerpo">
+      <div class="wrap grid2">
+        <article class="texto">
+          <p class="eyebrow">En qué consiste</p>
+          <h2 class="section-title">{s.title}</h2>
+          {s.html
+            ? <div class="rich" set:html={s.html} />
+            : s.que.map((p) => <p>{p}</p>)}
+          <p class="aviso">La información de esta página es orientativa y no reemplaza una evaluación clínica. La indicación de cada tratamiento requiere una valoración individual.</p>
+        </article>
+        <aside class="lateral">
+          <div class="foto"><Media src={img} alt="" sizes="(max-width: 900px) 90vw, 560px" /></div>
+          <div class="box">
+            <p class="eyebrow">{cat.title}</p>
+            <ul>
+              {hermanos.map((h) => (
+                <li><a href={servicioHref(h.slug)} aria-current={h.slug === s.slug ? 'page' : undefined} class:list={{ on: h.slug === s.slug }}><span>{h.title}</span><Icon name="arrow" size={12} /></a></li>
+              ))}
+            </ul>
+          </div>
+          <div class="box cta">
+            <h3>¿Tienes dudas?</h3>
+            <p>Cuéntanos tu caso y te orientamos sobre el primer paso.</p>
+            <a href={`/contacto/?motivo=${s.slug}`} class="btn btn-primary">Solicitar mi cita <Icon name="arrow" size={14} /></a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="cuando">
+      <div class="wrap grid3">
+        <div>
+          <p class="eyebrow">Cuándo consultar</p>
+          <h2 class="section-title">Puede ser buen momento si…</h2>
+        </div>
+        <ul class="checks">
+          {s.cuando.map((c) => <li><Icon name="leaf" size={20} /><span>{c}</span></li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">Cómo trabajamos</p>
+        <h2 class="section-title pasos-t">Un paso a la vez, contigo.</h2>
+        <ol class="pasos">
+          {s.proceso.map((p, i) => <li><span class="n">0{i + 1}</span><h3>{p.t}</h3><p>{p.d}</p></li>)}
+        </ol>
+      </div>
+    </section>
+
+    {s.faqs.length > 0 && (
+      <section class="faqs">
+        <div class="wrap grid3">
+          <div><p class="eyebrow">Preguntas frecuentes</p><h2 class="section-title">Lo que más nos preguntan.</h2></div>
+          <div class="lista">
+            {s.faqs.map((f, i) => (
+              <details open={i === 0}><summary><span>{f.q}</span><Icon name="plus" size={18} /></summary><div class="resp"><p>{f.a}</p></div></details>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <section class="section otros">
+      <div class="wrap">
+        <p class="eyebrow">Otros servicios</p>
+        <ul class="chips">
+          {otros.map((o) => <li><a href={servicioHref(o.slug)}>{o.title}</a></li>)}
+        </ul>
+      </div>
+    </section>
+    <CtaBand />
+</Page>
+
+<style>
+  .hero { position: relative; overflow: hidden; background: #3a2926; }
+  .grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr; padding-block: clamp(22px, 2.8vw, 38px); }
+  .crumbs { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; margin-bottom: 4px; }
+  .crumbs a:hover { text-decoration: underline; }
+  .copy { display: grid; gap: 8px; align-content: center; }
+  h1 { font-size: clamp(1.9rem, 3.4vw, 2.8rem); line-height: 1.1; letter-spacing: -0.012em; }
+  .lead { font-size: 1.02rem; max-width: 62ch; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; margin-top: 10px; }
+  .foto { aspect-ratio: 4 / 3; border-radius: 6px; overflow: hidden; background: var(--nude-suave); }
+  .foto :global(img) { width: 100%; height: 100%; object-fit: cover; }
+
+  .grid2 { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
+  /* Recorrido extra de scroll: la columna derecha queda fija un trecho y luego sigue con la página. Ajusta el valor para más o menos tiempo detenida. */
+  .texto { padding-bottom: 260px; }
+  .texto { display: grid; gap: 20px; max-width: 62ch; }
+  .texto .eyebrow { margin-bottom: -4px; }
+  .texto p:not(.eyebrow):not(.aviso), .rich { color: var(--tinta-suave); font-size: 1.08rem; }
+  .rich :global(p) { margin: 0 0 1em; } .rich :global(ul) { margin: 0 0 1em 1.2em; list-style: disc; }
+  .aviso { font-size: 13.5px; color: var(--tinta-suave); border-left: 2px solid var(--rosa-cobre); padding-left: 14px; margin-top: 8px; }
+  .lateral { display: grid; gap: 20px; position: sticky; top: 110px; }
+  .box { width: min(100%, 360px); background: var(--blanco-rosado); border: 1px solid var(--linea); border-radius: 8px; padding: 22px 24px; }
+  .box .eyebrow { margin-bottom: 8px; }
+  .box ul { display: grid; }
+  .box li a { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--linea); font-size: 15px; }
+  .box li:last-child a { border-bottom: 0; }
+  .box li a :global(svg) { color: var(--terracota); flex: none; opacity: .5; }
+  .box li a:hover, .box li a.on { color: var(--terracota-hover); }
+  .box li a.on { font-weight: 500; }
+  .cta { background: var(--rosa-nude); border-color: transparent; display: grid; gap: 10px; }
+  .cta h3 { font-size: 1.6rem; } .cta p { color: var(--tinta-suave); font-size: 15px; } .cta .btn { margin-top: 8px; justify-self: start; }
+
+  .cuando { background: var(--nude-suave); padding-block: clamp(56px, 8vw, 100px); }
+  .grid3 { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
+  .grid3 .eyebrow { margin-bottom: 16px; }
+  .checks { display: grid; gap: 4px; }
+  .checks li { display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid var(--linea); font-size: 1.08rem; }
+  .checks li:first-child { border-top: 1px solid var(--linea); }
+  .checks :global(svg) { color: var(--terracota); flex: none; margin-top: 3px; }
+
+  .pasos-t { margin: 16px 0 48px; }
+  .pasos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .pasos li { border-top: 1px solid var(--rosa-cobre); padding-top: 22px; }
+  .n { font: italic 400 2rem/1 var(--f-titulo); color: var(--terracota); display: block; margin-bottom: 18px; }
+  .pasos h3 { font-size: 1.7rem; margin-bottom: 12px; } .pasos p { color: var(--tinta-suave); max-width: 34ch; }
+
+  .faqs { background: var(--blanco-rosado); padding-block: clamp(56px, 8vw, 100px); border-block: 1px solid var(--linea); }
+  details { border-bottom: 1px solid var(--linea); } details:first-child { border-top: 1px solid var(--linea); }
+  summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 22px 0; font-size: 1.1rem; }
+  summary::-webkit-details-marker { display: none; }
+  summary :global(svg) { color: var(--terracota); flex: none; transition: transform .25s; }
+  details[open] summary :global(svg) { transform: rotate(45deg); }
+  .resp { padding: 0 48px 24px 0; color: var(--tinta-suave); max-width: 60ch; }
+
+  .otros .eyebrow { margin-bottom: 18px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chips a { display: inline-block; padding: 11px 18px; border: 1px solid var(--rosa-cobre); border-radius: 999px; font-size: 14.5px; transition: background .2s, color .2s, border-color .2s; }
+  .chips a:hover { background: var(--terracota-profundo); border-color: var(--terracota-profundo); color: #fff; }
+
+  @media (max-width: 900px) {
+    .grid, .grid2, .grid3 { grid-template-columns: 1fr; }
+    .visual { order: -1; } .arch { width: min(100%, 320px); }
+    .lateral { position: static; }
+    .texto { padding-bottom: 0; }
+    .pasos { grid-template-columns: 1fr; gap: 32px; }
+  }
+</style>

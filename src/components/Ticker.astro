@@ -1,0 +1,19 @@
+---
+import { getServicios } from '../lib/wp';
+const items = (await getServicios()).map((s) => s.title.replace(/ ·.*/, ''));
+---
+<div class="ticker" aria-hidden="true">
+  <div class="track">
+    {[0, 1].map(() => <ul>{items.map((t) => <li>{t}</li>)}</ul>)}
+  </div>
+</div>
+<style>
+  .ticker { background: #efd3c8; color: var(--tinta); overflow: hidden; border-block: 1px solid rgb(138 75 64 / .14); }
+  .track { display: flex; width: max-content; animation: marq 60s linear infinite; }
+  .ticker:hover .track { animation-play-state: paused; }
+  ul { display: flex; flex: none; }
+  li { font: italic 400 1.15rem/1 var(--f-titulo); padding: 11px 0; white-space: nowrap; }
+  li::after { content: '✦'; font-style: normal; font-size: .7em; margin-inline: 28px; opacity: .55; }
+  @keyframes marq { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .track { animation: none; flex-wrap: wrap; width: auto; } ul:last-child { display: none; } }
+</style>

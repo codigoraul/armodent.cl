@@ -1,0 +1,79 @@
+---
+import Page from '../layouts/Page.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import Faqs from '../components/Faqs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import hero from '../assets/hero-sonrisa.jpg';
+
+const pasos = [
+  { n: '01', t: 'Nos cuentas qué necesitas', d: 'Completas el formulario de contacto con tu motivo de consulta. Te escribimos o llamamos para coordinar un horario y resolver tus primeras dudas.' },
+  { n: '02', t: 'Conversamos y te evaluamos', d: 'En la visita revisamos tus inquietudes y antecedentes, y hacemos una valoración. Si se necesitan estudios complementarios, te explicamos para qué sirven.' },
+  { n: '03', t: 'Trazamos un plan contigo', d: 'Te presentamos las opciones posibles, sus etapas y cuidados. Decides a tu ritmo: puedes preguntar todo lo que quieras antes de comenzar.' },
+];
+const traer = [
+  'Radiografías, informes o exámenes anteriores, si los tienes.',
+  'Indicaciones o diagnósticos de otros profesionales.',
+  'Tus dudas anotadas, para que no se nos pase ninguna.',
+  'Si la consulta es para un niño o niña, ven con su adulto responsable.',
+];
+const esperar = [
+  { t: 'Tiempo para escucharte', d: 'La primera visita es una conversación, no un trámite.' },
+  { t: 'Explicaciones claras', d: 'Te contamos qué encontramos y qué significa, sin tecnicismos innecesarios.' },
+  { t: 'Opciones, no presiones', d: 'Te mostramos alternativas y tú decides cuál se ajusta a ti.' },
+];
+---
+<Page title="Tu primera visita · ARMODENT" description="Cómo es tu primera visita a ARMODENT: qué ocurre, qué llevar y qué puedes esperar de la valoración en odontología y estética facial." current="primera-visita">
+  <PageHero
+    eyebrow="Tu primera visita"
+    title="Primero te conocemos.<br /><em>Después, decidimos contigo.</em>"
+    lead="No necesitas tener todas las respuestas antes de venir. Empecemos por tus preguntas."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Tu primera visita' }]}
+    image={hero}
+  >
+  </PageHero>
+
+  <section class="section">
+    <div class="wrap">
+      <header class="reveal"><p class="eyebrow">Paso a paso</p><h2 class="section-title">Así es tu primera visita.</h2></header>
+      <ol class="pasos">
+        {pasos.map((p) => <li class="reveal"><span class="n">{p.n}</span><div><h3>{p.t}</h3><p>{p.d}</p></div></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="wrap dos">
+      <div class="reveal">
+        <p class="eyebrow">Para tu cita</p>
+        <h2 class="section-title">Qué conviene<br />traer.</h2>
+        <ul class="checks">{traer.map((t) => <li><Icon name="leaf" size={20} /><span>{t}</span></li>)}</ul>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow">Qué puedes esperar</p>
+        <h2 class="section-title">Lo que cuidamos<br />en cada visita.</h2>
+        <ul class="esp">{esperar.map((e) => <li><strong>{e.t}</strong><p>{e.d}</p></li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <Faqs eyebrow="Preguntas frecuentes" titulo="Resolvemos tus dudas." texto="Si te queda alguna pregunta, escríbenos y la conversamos." />
+  <CtaBand />
+</Page>
+
+<style>
+  .section header { margin-bottom: 44px; } .section .eyebrow { margin-bottom: 16px; }
+  .pasos { list-style: none; margin: 0; padding: 0; display: grid; }
+  .pasos li { display: grid; grid-template-columns: 120px 1fr; gap: 24px; padding: 34px 0; border-top: 1px solid var(--linea); align-items: baseline; }
+  .pasos li:last-child { border-bottom: 1px solid var(--linea); }
+  .n { font: italic 400 3.4rem/1 var(--f-titulo); color: var(--terracota); }
+  .pasos h3 { font-size: 2rem; margin-bottom: 10px; } .pasos p { color: var(--tinta-suave); max-width: 60ch; font-size: 1.08rem; }
+  .bloque { background: var(--nude-suave); padding-block: clamp(64px, 9vw, 110px); }
+  .dos { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 7vw, 110px); }
+  .dos .eyebrow { margin-bottom: 16px; }
+  .checks { display: grid; margin-top: 32px; } .checks li { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--linea); } .checks li:first-child { border-top: 1px solid var(--linea); }
+  .checks :global(svg) { color: var(--terracota); flex: none; margin-top: 3px; }
+  .esp { display: grid; margin-top: 32px; } .esp li { padding: 16px 0; border-bottom: 1px solid var(--linea); } .esp li:first-child { border-top: 1px solid var(--linea); }
+  .esp strong { font: 400 1.35rem/1.2 var(--f-titulo); } .esp p { color: var(--tinta-suave); margin-top: 4px; font-size: 15.5px; }
+  @media (max-width: 900px) { .dos { grid-template-columns: 1fr; } .pasos li { grid-template-columns: 1fr; gap: 8px; } }
+</style>

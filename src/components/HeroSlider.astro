@@ -1,0 +1,119 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import bg1 from '../assets/fondo-clinica.jpg';
+import bg2 from '../assets/servicio-ortodoncia.jpg';
+import bg3 from '../assets/slide-clinica-elegante.jpg';
+
+const slides = [
+  {
+    eyebrow: 'Odontología · Estética facial',
+    title: 'Una sonrisa sana,<br />un rostro <em>en armonía.</em>',
+    text: 'En ARMODENT cuidamos tu salud oral y la armonía de tu rostro en un espacio cálido, donde primero te escuchamos.',
+    cta: { label: 'Reservar mi primera cita', href: '/contacto/' },
+    alt: { label: 'Ver servicios', href: '/servicios/' },
+    img: bg1, pos: '60% 35%',
+  },
+  {
+    eyebrow: 'Ortodoncia',
+    title: 'Alinear tu sonrisa,<br /><em>a tu medida.</em>',
+    text: 'Ortodoncia y ortodoncia invisible, con un plan claro que te explicamos paso a paso después de evaluar tu caso.',
+    cta: { label: 'Conocer ortodoncia', href: '/servicios/ortodoncia/' },
+    alt: { label: 'Ortodoncia invisible', href: '/servicios/ortodoncia-invisible/' },
+    img: bg2, pos: '50% 45%',
+  },
+  {
+    eyebrow: 'Medicina estética',
+    title: 'Armonía facial,<br /><em>con mirada clínica.</em>',
+    text: 'Procedimientos estéticos indicados tras una valoración personalizada, buscando resultados naturales y acordes a ti.',
+    cta: { label: 'Medicina estética', href: '/servicios/medicina-estetica/' },
+    alt: { label: 'Tu primera visita', href: '/tu-primera-visita/' },
+    img: bg3, pos: '50% 50%',
+  },
+];
+---
+<section class="slider" aria-roledescription="carrusel" aria-label="Destacados de ARMODENT" data-slider>
+  <div class="track">
+    {slides.map((s, i) => (
+      <div class:list={['slide', { on: i === 0 }]} role="group" aria-roledescription="diapositiva" aria-label={`${i + 1} de ${slides.length}`} aria-hidden={i === 0 ? 'false' : 'true'}>
+        <div class="bg" style={`--p:${s.pos}`}>
+          <Image src={s.img} alt="" widths={[768, 1280, 1920]} sizes="100vw" loading={i === 0 ? 'eager' : 'lazy'} />
+        </div>
+        <div class="in wrap">
+          <p class="eyebrow">{s.eyebrow}</p>
+          {i === 0 ? <h1 set:html={s.title} /> : <h2 class="h" set:html={s.title} />}
+          <p class="txt">{s.text}</p>
+          <div class="ctas">
+            <a href={s.cta.href} class="btn btn-primary" tabindex={i === 0 ? 0 : -1}>{s.cta.label} <Icon name="arrow" size={14} /></a>
+            <a href={s.alt.href} class="btn btn-ghost" tabindex={i === 0 ? 0 : -1}>{s.alt.label} <Icon name="arrow" size={12} /></a>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+  <button class="nav prev" type="button" aria-label="Diapositiva anterior"><span aria-hidden="true">‹</span></button>
+  <button class="nav next" type="button" aria-label="Diapositiva siguiente"><span aria-hidden="true">›</span></button>
+  <div class="dots" role="tablist" aria-label="Elegir diapositiva">
+    {slides.map((_, i) => <button type="button" role="tab" class:list={{ on: i === 0 }} aria-selected={i === 0 ? 'true' : 'false'} aria-label={`Ir a la diapositiva ${i + 1}`} data-i={i}></button>)}
+  </div>
+</section>
+
+<style>
+  .slider { position: relative; overflow: hidden; background: #1f1715; color: #f6e9e3; }
+  .track { position: relative; min-height: clamp(520px, 74vh, 700px); }
+  .slide { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; visibility: hidden; transition: opacity .9s ease, visibility .9s; }
+  .slide.on { opacity: 1; visibility: visible; z-index: 1; }
+  .bg { position: absolute; inset: 0; overflow: hidden; }
+  .bg :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: var(--p, 50% 50%); transform: scale(1.04); transition: transform 7s ease-out; }
+  .slide.on .bg :global(img) { transform: scale(1.0); }
+  .bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(20 15 14 / .72), rgb(26 19 17 / .6) 55%, rgb(18 13 12 / .78)); }
+  .in { position: relative; z-index: 1; display: grid; justify-items: center; gap: 22px; text-align: center; padding-block: 72px 96px; max-width: 880px; }
+  .eyebrow { color: var(--rosa-nude); }
+  h1, .h { font-family: var(--f-titulo); font-weight: 400; font-size: clamp(2.5rem, 5.6vw, 4.6rem); line-height: 1.06; letter-spacing: -0.016em; color: #fff8f4; margin: 0; }
+  .in :global(em) { font-style: normal; color: var(--rosa-palido); }
+  .txt { font-size: 1.2rem; max-width: 52ch; color: #eadbd4; }
+  .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 16px; margin-top: 8px; }
+  .ctas .btn { font-size: 18px; }
+  .btn-primary { background: #fbf1ec; color: var(--tinta); text-shadow: none; font-weight: 500; } .btn-primary:hover { background: #fff; }
+  .btn-ghost { padding-inline: 26px; border: 1px solid var(--rosa-nude); color: var(--rosa-nude); } .btn-ghost:hover { background: var(--rosa-nude); color: var(--tinta); }
+  .nav { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgb(232 197 184 / .55); background: rgb(34 23 21 / .35); color: #fbf1ec; font-size: 28px; line-height: 1; display: grid; place-items: center; cursor: pointer; transition: background .2s, border-color .2s; padding: 0 0 4px; }
+  .nav:hover { background: rgb(232 197 184 / .9); color: var(--tinta); border-color: transparent; }
+  .prev { left: clamp(10px, 2.4vw, 32px); } .next { right: clamp(10px, 2.4vw, 32px); }
+  .dots { position: absolute; z-index: 3; left: 0; right: 0; bottom: 28px; display: flex; justify-content: center; gap: 12px; }
+  .dots button { width: 34px; height: 4px; border: 0; padding: 0; border-radius: 2px; background: rgb(251 241 236 / .35); cursor: pointer; transition: background .25s, width .25s; }
+  .dots button.on { background: var(--rosa-nude); width: 52px; }
+  .dots button:focus-visible, .nav:focus-visible { outline: 2px solid var(--rosa-nude); outline-offset: 3px; }
+  @media (max-width: 700px) { .nav { display: none; } .in { padding-block: 56px 88px; } .txt { font-size: 1.05rem; } .track { min-height: 560px; } }
+  @media (prefers-reduced-motion: reduce) { .slide { transition: none; } .bg :global(img) { transition: none; transform: none !important; } }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-slider]');
+  if (root) {
+    const slides = [...root.querySelectorAll<HTMLElement>('.slide')];
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('.dots button')];
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let cur = 0; let timer: number | undefined; let paused = false;
+    const show = (n: number) => {
+      cur = (n + slides.length) % slides.length;
+      slides.forEach((s, i) => {
+        const on = i === cur;
+        s.classList.toggle('on', on);
+        s.setAttribute('aria-hidden', on ? 'false' : 'true');
+        s.querySelectorAll<HTMLElement>('a').forEach((a) => (a.tabIndex = on ? 0 : -1));
+      });
+      dots.forEach((d, i) => { d.classList.toggle('on', i === cur); d.setAttribute('aria-selected', i === cur ? 'true' : 'false'); });
+    };
+    const start = () => { if (reduce) return; stop(); timer = window.setInterval(() => { if (!paused) show(cur + 1); }, 6500); };
+    const stop = () => { if (timer) window.clearInterval(timer); };
+    root.querySelector('.prev')?.addEventListener('click', () => { show(cur - 1); start(); });
+    root.querySelector('.next')?.addEventListener('click', () => { show(cur + 1); start(); });
+    dots.forEach((d) => d.addEventListener('click', () => { show(Number(d.dataset.i)); start(); }));
+    root.addEventListener('mouseenter', () => (paused = true));
+    root.addEventListener('mouseleave', () => (paused = false));
+    root.addEventListener('focusin', () => (paused = true));
+    root.addEventListener('focusout', () => (paused = false));
+    root.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') { show(cur - 1); start(); } if (e.key === 'ArrowRight') { show(cur + 1); start(); } });
+    start();
+  }
+</script>
