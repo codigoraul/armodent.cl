@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { u } from '../lib/url';
 const { title, description } = Astro.props;
 const url = new URL(Astro.url.pathname, Astro.site);
 const ld = { '@context': 'https://schema.org', '@type': ['Dentist', 'MedicalBusiness'], name: 'ARMODENT', description, url: Astro.site?.toString(), image: new URL('/og.jpg', Astro.site).toString(), slogan: 'Tu sonrisa. Tu esencia. En armonía.' };
@@ -13,7 +14,7 @@ const ld = { '@context': 'https://schema.org', '@type': ['Dentist', 'MedicalBusi
     <meta name="description" content={description} />
     <meta name="theme-color" content="#e8c5b8" />
     <link rel="canonical" href={url} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={u('/favicon.svg')} type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_CL" />
     <meta property="og:title" content={title} />

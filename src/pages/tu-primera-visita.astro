@@ -5,6 +5,7 @@ import Icon from '../components/Icon.astro';
 import Faqs from '../components/Faqs.astro';
 import CtaBand from '../components/CtaBand.astro';
 import hero from '../assets/hero-sonrisa.jpg';
+import { u } from '../lib/url';
 
 const pasos = [
   { n: '01', t: 'Nos cuentas qué necesitas', d: 'Completas el formulario de contacto con tu motivo de consulta. Te escribimos o llamamos para coordinar un horario y resolver tus primeras dudas.' },
@@ -28,7 +29,7 @@ const esperar = [
     eyebrow="Tu primera visita"
     title="Primero te conocemos.<br /><em>Después, decidimos contigo.</em>"
     lead="No necesitas tener todas las respuestas antes de venir. Empecemos por tus preguntas."
-    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Tu primera visita' }]}
+    crumbs={[{ label: 'Inicio', href: u('/') }, { label: 'Tu primera visita' }]}
     image={hero}
   >
   </PageHero>

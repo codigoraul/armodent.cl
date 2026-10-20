@@ -4,6 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import CtaBand from '../components/CtaBand.astro';
 import clinica from '../assets/clinica.jpg';
+import { u } from '../lib/url';
 
 const valores = [
   { n: '01', t: 'Escucha primero', d: 'Cada consulta empieza por tu historia, tus dudas y lo que esperas. Sin apuro y sin guion.', tono: 'nude' },
@@ -17,7 +18,7 @@ const valores = [
     eyebrow="La clínica"
     title="Un lugar donde puedes sentirte <em>en confianza.</em>"
     lead="ARMODENT reúne odontología y estética facial en un espacio cálido y sereno, con una atención que empieza por escucharte."
-    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'La clínica' }]}
+    crumbs={[{ label: 'Inicio', href: u('/') }, { label: 'La clínica' }]}
     image={clinica}
   />
 
@@ -50,8 +51,8 @@ const valores = [
       <div class="texto reveal">
         <p>Desde el cuidado preventivo y las especialidades odontológicas hasta la valoración de estética facial, reunimos en un solo lugar las áreas que acompañan la salud y la armonía de tu rostro.</p>
         <div class="links">
-          <a href="/servicios/" class="btn btn-primary">Ver todos los servicios <Icon name="arrow" size={14} /></a>
-          <a href="/tu-primera-visita/" class="btn btn-ghost">Cómo es tu primera visita <Icon name="arrow" size={12} /></a>
+          <a href={u('/servicios/')} class="btn btn-primary">Ver todos los servicios <Icon name="arrow" size={14} /></a>
+          <a href={u('/tu-primera-visita/')} class="btn btn-ghost">Cómo es tu primera visita <Icon name="arrow" size={12} /></a>
         </div>
       </div>
     </div>

@@ -4,30 +4,31 @@ import Icon from './Icon.astro';
 import bg1 from '../assets/fondo-clinica.jpg';
 import bg2 from '../assets/servicio-ortodoncia.jpg';
 import bg3 from '../assets/slide-clinica-elegante.jpg';
+import { u } from '../lib/url';
 
 const slides = [
   {
     eyebrow: 'Odontología · Estética facial',
     title: 'Una sonrisa sana,<br />un rostro <em>en armonía.</em>',
     text: 'En ARMODENT cuidamos tu salud oral y la armonía de tu rostro en un espacio cálido, donde primero te escuchamos.',
-    cta: { label: 'Reservar mi primera cita', href: '/contacto/' },
-    alt: { label: 'Ver servicios', href: '/servicios/' },
+    cta: { label: 'Reservar mi primera cita', href: u('/contacto/') },
+    alt: { label: 'Ver servicios', href: u('/servicios/') },
     img: bg1, pos: '60% 35%',
   },
   {
     eyebrow: 'Ortodoncia',
     title: 'Alinear tu sonrisa,<br /><em>a tu medida.</em>',
     text: 'Ortodoncia y ortodoncia invisible, con un plan claro que te explicamos paso a paso después de evaluar tu caso.',
-    cta: { label: 'Conocer ortodoncia', href: '/servicios/ortodoncia/' },
-    alt: { label: 'Ortodoncia invisible', href: '/servicios/ortodoncia-invisible/' },
+    cta: { label: 'Conocer ortodoncia', href: u('/servicios/ortodoncia/') },
+    alt: { label: 'Ortodoncia invisible', href: u('/servicios/ortodoncia-invisible/') },
     img: bg2, pos: '50% 45%',
   },
   {
     eyebrow: 'Medicina estética',
     title: 'Armonía facial,<br /><em>con mirada clínica.</em>',
     text: 'Procedimientos estéticos indicados tras una valoración personalizada, buscando resultados naturales y acordes a ti.',
-    cta: { label: 'Medicina estética', href: '/servicios/medicina-estetica/' },
-    alt: { label: 'Tu primera visita', href: '/tu-primera-visita/' },
+    cta: { label: 'Medicina estética', href: u('/servicios/medicina-estetica/') },
+    alt: { label: 'Tu primera visita', href: u('/tu-primera-visita/') },
     img: bg3, pos: '50% 50%',
   },
 ];

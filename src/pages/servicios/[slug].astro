@@ -7,6 +7,7 @@ import HeroBg from '../../components/HeroBg.astro';
 import { getServicios } from '../../lib/wp';
 import { categorias } from '../../data/fallback';
 import { imagenCategoria, imagenDeServicio, servicioHref } from '../../lib/images';
+import { u } from '../../lib/url';
 
 export async function getStaticPaths() {
   const todos = await getServicios();
@@ -24,7 +25,7 @@ const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
       <div class="wrap grid">
         <div class="copy">
           <nav class="crumbs" aria-label="Ruta">
-            <a href="/">Inicio</a><span>/</span><a href="/servicios/">Servicios</a><span>/</span><span aria-current="page">{s.title}</span>
+            <a href={u('/')}>Inicio</a><span>/</span><a href={u('/servicios/')}>Servicios</a><span>/</span><span aria-current="page">{s.title}</span>
           </nav>
           <p class="eyebrow">{cat.title} · {cat.eyebrow}</p>
           <h1>{s.title}</h1>
@@ -56,7 +57,7 @@ const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
           <div class="box cta">
             <h3>¿Tienes dudas?</h3>
             <p>Cuéntanos tu caso y te orientamos sobre el primer paso.</p>
-            <a href={`/contacto/?motivo=${s.slug}`} class="btn btn-primary">Solicitar mi cita <Icon name="arrow" size={14} /></a>
+            <a href={u(`/contacto/?motivo=${s.slug}`)} class="btn btn-primary">Solicitar mi cita <Icon name="arrow" size={14} /></a>
           </div>
         </aside>
       </div>

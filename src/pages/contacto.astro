@@ -2,13 +2,14 @@
 import Page from '../layouts/Page.astro';
 import PageHero from '../components/PageHero.astro';
 import ContactoForm from '../components/ContactoForm.astro';
+import { u } from '../lib/url';
 ---
 <Page title="Contacto · ARMODENT" description="Contáctanos para reservar tu primera visita en ARMODENT, clínica de odontología y estética facial." current="contacto">
   <PageHero
     eyebrow="Contacto"
     title="Tu próxima visita<br /><em>empieza aquí.</em>"
     lead="Déjanos tu motivo de consulta para dar el primer paso hacia una atención personalizada."
-    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Contacto' }]}
+    crumbs={[{ label: 'Inicio', href: u('/') }, { label: 'Contacto' }]}
     tone="suave"
   />
   <ContactoForm />

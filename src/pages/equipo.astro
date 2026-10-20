@@ -4,6 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Media from '../components/Media.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { equipo } from '../data/equipo';
+import { u } from '../lib/url';
 
 const fotos = import.meta.glob<{ default: ImageMetadata }>('../assets/equipo/*.{jpg,jpeg,png,webp}', { eager: true });
 const tonos = ['nude', 'palido', 'gris'] as const;
@@ -19,7 +20,7 @@ const lista = equipo.map((p, i) => ({
     eyebrow="Equipo"
     title="Las personas que <em>te cuidan.</em>"
     lead="Un equipo de profesionales de odontología y estética facial que trabaja en conjunto, con una atención que empieza por escucharte."
-    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Equipo' }]}
+    crumbs={[{ label: 'Inicio', href: u('/') }, { label: 'Equipo' }]}
   />
 
   <section class="section">

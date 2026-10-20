@@ -17,10 +17,11 @@ import f_cirugia_bucomaxilofacial from '../assets/servicios/cirugia-bucomaxilofa
 import f_ttm_trastornos_temporomandibulares from '../assets/servicios/ttm-trastornos-temporomandibulares.jpg';
 import f_medicina_estetica from '../assets/servicios/medicina-estetica.jpg';
 import type { CategoriaId } from '../data/fallback';
+import { u } from './url';
 
 // Imagen por categoría. Si un servicio trae imagen destacada desde WordPress, esa tiene prioridad.
 export const imagenCategoria: Record<CategoriaId, ImageMetadata> = { odontologia, ortodoncia, estetica };
-export const servicioHref = (slug: string) => `/servicios/${slug}/`;
+export const servicioHref = (slug: string) => u(`/servicios/${slug}/`);
 
 // Foto por servicio (Freepik, licencia gratuita: requiere atribución a Freepik).
 type Enc = { src: ImageMetadata; pos: string; zoom?: number };

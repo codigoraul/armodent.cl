@@ -3,6 +3,7 @@ import Icon from './Icon.astro';
 import Swash from './Swash.astro';
 import { getAjustes } from '../lib/wp';
 import { waLink } from '../lib/contact';
+import { u } from '../lib/url';
 const a = await getAjustes();
 const wa = waLink(a);
 const { titulo = 'Demos el primer paso<br />hacia tu cuidado.', texto = 'Una conversación puede ser el comienzo. Cuéntanos qué necesitas.' } = Astro.props;
@@ -16,7 +17,7 @@ const { titulo = 'Demos el primer paso<br />hacia tu cuidado.', texto = 'Una con
       <p class="sub">{texto}</p>
     </div>
     <div class="btns">
-      <a href="/contacto/" class="btn btn-light">Quiero reservar una cita <Icon name="arrow" size={14} /></a>
+      <a href={u('/contacto/')} class="btn btn-light">Quiero reservar una cita <Icon name="arrow" size={14} /></a>
       {wa && <a href={wa} class="btn btn-line" rel="noopener">Escribir por WhatsApp</a>}
     </div>
   </div>

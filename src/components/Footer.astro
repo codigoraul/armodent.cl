@@ -1,6 +1,8 @@
 ---
 import { getAjustes, getServicios } from '../lib/wp';
 import { waLink, telLink } from '../lib/contact';
+import { u } from '../lib/url';
+import { servicioHref } from '../lib/images';
 const a = await getAjustes();
 const servicios = await getServicios();
 const destacados = ['odontologia-general', 'ortodoncia', 'rehabilitacion-oral', 'medicina-estetica'].map((s) => servicios.find((x) => x.slug === s)).filter(Boolean) as typeof servicios;
@@ -12,22 +14,22 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
 <footer class="footer">
   <div class="wrap grid">
     <div class="marca">
-      <img src="/logo-armodent.svg" alt="Armodent — Odontología y estética facial" width="281" height="59" />
+      <img src={u('/logo-armodent.svg')} alt="Armodent — Odontología y estética facial" width="281" height="59" />
       <p class="lema">Salud, bienestar y armonía.<br />Sin dejar de ser tú.</p>
-      <a href="/contacto/" class="reservar">Reservar mi primera cita <span aria-hidden="true">→</span></a>
+      <a href={u('/contacto/')} class="reservar">Reservar mi primera cita <span aria-hidden="true">→</span></a>
     </div>
     <nav aria-label="Sitio">
       <h4 class="eyebrow">Sitio</h4>
-      <ul><li><a href="/">Inicio</a></li><li><a href="/la-clinica/">La clínica</a></li><li><a href="/servicios/">Servicios</a></li><li><a href="/equipo/">Equipo</a></li><li><a href="/contacto/">Contacto</a></li></ul>
+      <ul><li><a href={u('/')}>Inicio</a></li><li><a href={u('/la-clinica/')}>La clínica</a></li><li><a href={u('/servicios/')}>Servicios</a></li><li><a href={u('/equipo/')}>Equipo</a></li><li><a href={u('/contacto/')}>Contacto</a></li></ul>
     </nav>
     <nav aria-label="Servicios destacados">
       <h4 class="eyebrow">Cuidado integral</h4>
-      <ul>{destacados.map((s) => <li><a href={`/servicios/${s.slug}/`}>{s.title}</a></li>)}</ul>
+      <ul>{destacados.map((s) => <li><a href={servicioHref(s.slug)}>{s.title}</a></li>)}</ul>
     </nav>
     {!hayContacto && (
       <div>
         <h4 class="eyebrow">Contacto</h4>
-        <ul><li><a href="/contacto/">Escríbenos</a></li><li><a href="/tu-primera-visita/">Cómo es tu primera visita</a></li></ul>
+        <ul><li><a href={u('/contacto/')}>Escríbenos</a></li><li><a href={u('/tu-primera-visita/')}>Cómo es tu primera visita</a></li></ul>
       </div>
     )}
     {hayContacto && (

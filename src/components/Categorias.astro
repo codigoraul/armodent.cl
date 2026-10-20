@@ -3,7 +3,8 @@ import Icon from './Icon.astro';
 import Media from './Media.astro';
 import { getServicios } from '../lib/wp';
 import { categorias } from '../data/fallback';
-import { imagenCategoria } from '../lib/images';
+import { imagenCategoria, servicioHref } from '../lib/images';
+import { u } from '../lib/url';
 const todos = await getServicios();
 const tonos = { odontologia: 'nude', ortodoncia: 'palido', estetica: 'arena' } as const;
 const grupos = categorias.map((c, i) => ({ ...c, n: `0${i + 1}`, tono: tonos[c.id], items: todos.filter((s) => s.categoria === c.id), src: imagenCategoria[c.id] }));
@@ -18,8 +19,8 @@ const grupos = categorias.map((c, i) => ({ ...c, n: `0${i + 1}`, tono: tonos[c.i
       <p class="eyebrow">{g.eyebrow}</p>
       <h3>{g.title}</h3>
       <p class="ex">{g.excerpt}</p>
-      <ul class="pills">{g.items.map((s) => <li><a href={`/servicios/${s.slug}/`}>{s.title.replace(/ ·.*/, '')}</a></li>)}</ul>
-      <a href={`/servicios/#${g.id}`} class="more">Ver {g.title.toLowerCase()} <Icon name="arrow" size={13} /></a>
+      <ul class="pills">{g.items.map((s) => <li><a href={servicioHref(s.slug)}>{s.title.replace(/ ·.*/, '')}</a></li>)}</ul>
+      <a href={u(`/servicios/#${g.id}`)} class="more">Ver {g.title.toLowerCase()} <Icon name="arrow" size={13} /></a>
     </article>
   ))}
 </div>

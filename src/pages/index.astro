@@ -9,6 +9,7 @@ import CtaBand from '../components/CtaBand.astro';
 import HeroSlider from '../components/HeroSlider.astro';
 import clinica from '../assets/clinica.jpg';
 import estetica from '../assets/estetica-facial.jpg';
+import { u } from '../lib/url';
 
 const principios = [
   { n: '01', t: 'Primero te escuchamos', d: 'Tu historia y tus inquietudes son el punto de partida.' },
@@ -47,7 +48,7 @@ const pasos = [
         <ul class="princ">
           {principios.map((p) => <li><span>{p.n}</span><div><strong>{p.t}</strong><p>{p.d}</p></div></li>)}
         </ul>
-        <a href="/la-clinica/" class="btn btn-outline">Conocer la clínica <Icon name="arrow" size={14} /></a>
+        <a href={u('/la-clinica/')} class="btn btn-outline">Conocer la clínica <Icon name="arrow" size={14} /></a>
       </div>
     </div>
   </section>
@@ -56,7 +57,7 @@ const pasos = [
     <div class="wrap">
       <header class="head reveal">
         <div><p class="eyebrow">Tu primera visita</p><h2 class="section-title">Empezar es más simple<br />de lo que parece.</h2></div>
-        <a href="/tu-primera-visita/" class="btn btn-ghost">Cómo es tu primera visita <Icon name="arrow" size={12} /></a>
+        <a href={u('/tu-primera-visita/')} class="btn btn-ghost">Cómo es tu primera visita <Icon name="arrow" size={12} /></a>
       </header>
       <ol>
         {pasos.map((p) => <li class="reveal"><span class="n">{p.n}</span><h3>{p.t}</h3><p>{p.d}</p></li>)}
@@ -70,7 +71,7 @@ const pasos = [
         <p class="eyebrow">Estética facial</p>
         <h2 class="section-title">Realzar tu expresión,<br />respetando tu esencia.</h2>
         <p>Una mirada individual que considera tus rasgos, tus expectativas y tu bienestar, sin promesas de resultados idénticos entre personas.</p>
-        <a href="/servicios/medicina-estetica/" class="btn btn-outline">Conocer medicina estética <Icon name="arrow" size={14} /></a>
+        <a href={u('/servicios/medicina-estetica/')} class="btn btn-outline">Conocer medicina estética <Icon name="arrow" size={14} /></a>
         <small>Cada procedimiento está sujeto a valoración e indicación profesional.</small>
       </div>
       <div class="efoto reveal"><div class="arch"><Media src={estetica} alt="Paciente con expresión serena" sizes="(max-width: 900px) 80vw, 420px" /></div></div>

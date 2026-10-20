@@ -3,6 +3,8 @@ import Icon from './Icon.astro';
 import { getServicios, getAjustes } from '../lib/wp';
 import { waLink, telLink } from '../lib/contact';
 import { categorias } from '../data/fallback';
+import { u } from '../lib/url';
+import { servicioHref } from '../lib/images';
 const { current = 'inicio' } = Astro.props;
 const todos = await getServicios();
 const aj = await getAjustes();
@@ -10,11 +12,11 @@ const tel = telLink(aj); const wa = waLink(aj);
 const redes = [aj.instagram && { l: 'Instagram', h: aj.instagram }, aj.facebook && { l: 'Facebook', h: aj.facebook }].filter(Boolean) as { l: string; h: string }[];
 const grupos = categorias.map((c) => ({ ...c, items: todos.filter((s) => s.categoria === c.id) }));
 const nav = [
-  { id: 'inicio', href: '/', label: 'Inicio' },
-  { id: 'clinica', href: '/la-clinica/', label: 'La clínica' },
-  { id: 'servicios', href: '/servicios/', label: 'Servicios', menu: true },
-  { id: 'equipo', href: '/equipo/', label: 'Equipo' },
-  { id: 'contacto', href: '/contacto/', label: 'Contacto' },
+  { id: 'inicio', href: u('/'), label: 'Inicio' },
+  { id: 'clinica', href: u('/la-clinica/'), label: 'La clínica' },
+  { id: 'servicios', href: u('/servicios/'), label: 'Servicios', menu: true },
+  { id: 'equipo', href: u('/equipo/'), label: 'Equipo' },
+  { id: 'contacto', href: u('/contacto/'), label: 'Contacto' },
 ];
 ---
 <div class="topbar">
@@ -24,14 +26,14 @@ const nav = [
       {tel && <a href={tel} class="tb-item"><Icon name="phone" size={13} /> {aj.telefono}</a>}
       {wa && <a href={wa} class="tb-item" target="_blank" rel="noopener">WhatsApp</a>}
       {redes.map((r) => <a href={r.h} class="tb-item" target="_blank" rel="noopener">{r.l}</a>)}
-      <a href="/contacto/" class="tb-cta">Hablemos de tu próxima visita <Icon name="arrow" size={11} /></a>
+      <a href={u('/contacto/')} class="tb-cta">Hablemos de tu próxima visita <Icon name="arrow" size={11} /></a>
     </div>
   </div>
 </div>
 <header class="site-header">
   <div class="wrap bar">
-    <a href="/" class="logo" aria-label="Armodent · Odontología y estética facial, inicio">
-      <img src="/logo-armodent.svg" alt="Armodent — Odontología y estética facial" width="281" height="59" />
+    <a href={u('/')} class="logo" aria-label="Armodent · Odontología y estética facial, inicio">
+      <img src={u('/logo-armodent.svg')} alt="Armodent — Odontología y estética facial" width="281" height="59" />
     </a>
     <nav class="nav" aria-label="Principal">
       <ul>
@@ -43,7 +45,7 @@ const nav = [
                 {grupos.map((g) => (
                   <div>
                     <p class="eyebrow">{g.title}</p>
-                    <ul>{g.items.map((s) => <li><a href={`/servicios/${s.slug}/`}>{s.title}</a></li>)}</ul>
+                    <ul>{g.items.map((s) => <li><a href={servicioHref(s.slug)}>{s.title}</a></li>)}</ul>
                   </div>
                 ))}
               </div></div>
@@ -51,7 +53,7 @@ const nav = [
           </li>
         ))}
       </ul>
-      <a href="/contacto/" class="btn btn-primary">Reservar cita <Icon name="arrow" size={14} /></a>
+      <a href={u('/contacto/')} class="btn btn-primary">Reservar cita <Icon name="arrow" size={14} /></a>
     </nav>
     <button class="burger" aria-expanded="false" aria-controls="menu-movil" aria-label="Abrir menú"><span></span><span></span></button>
   </div>
@@ -64,12 +66,12 @@ const nav = [
             <summary>{n.label}<Icon name="plus" size={16} /></summary>
             <div class="sub">
               <a href={n.href}>Ver todos los servicios</a>
-              {grupos.map((g) => <><p class="eyebrow">{g.title}</p>{g.items.map((s) => <a href={`/servicios/${s.slug}/`}>{s.title}</a>)}</>)}
+              {grupos.map((g) => <><p class="eyebrow">{g.title}</p>{g.items.map((s) => <a href={servicioHref(s.slug)}>{s.title}</a>)}</>)}
             </div>
           </details>
         </li>
       ) : <li><a href={n.href}>{n.label}</a></li>)}
-      <li><a href="/contacto/" class="btn btn-primary">Reservar cita <Icon name="arrow" size={14} /></a></li>
+      <li><a href={u('/contacto/')} class="btn btn-primary">Reservar cita <Icon name="arrow" size={14} /></a></li>
     </ul>
    </div>
   </div>
