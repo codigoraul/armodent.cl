@@ -2,10 +2,10 @@
 import Icon from './Icon.astro';
 import Swash from './Swash.astro';
 import { getAjustes } from '../lib/wp';
-import { waLink } from '../lib/contact';
+import { agendaLink, agendaExterna } from '../lib/contact';
 import { u } from '../lib/url';
 const a = await getAjustes();
-const wa = waLink(a);
+const agenda = agendaLink(a, u('/contacto/')); const ext = agendaExterna(a);
 const { titulo = 'Demos el primer paso<br />hacia tu cuidado.', texto = 'Una conversación puede ser el comienzo. Cuéntanos qué necesitas.' } = Astro.props;
 ---
 <section class="cta">
@@ -17,8 +17,8 @@ const { titulo = 'Demos el primer paso<br />hacia tu cuidado.', texto = 'Una con
       <p class="sub">{texto}</p>
     </div>
     <div class="btns">
-      <a href={u('/contacto/')} class="btn btn-light">Quiero reservar una cita <Icon name="arrow" size={14} /></a>
-      {wa && <a href={wa} class="btn btn-line" rel="noopener">Escribir por WhatsApp</a>}
+      <a href={agenda} class="btn btn-light" {...ext}>Quiero reservar una cita <Icon name="arrow" size={14} /></a>
+      <a href={u('/contacto/')} class="btn btn-line">Enviar una consulta</a>
     </div>
   </div>
 </section>
@@ -27,7 +27,7 @@ const { titulo = 'Demos el primer paso<br />hacia tu cuidado.', texto = 'Una con
   .cta :global(.swash) { position: absolute; right: -4%; top: 14px; width: 52%; height: 80px; color: var(--rosa-cobre); opacity: .4; }
   .in { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
   .eyebrow { color: var(--rosa-nude); margin-bottom: 16px; }
-  h2 { color: var(--blanco-rosado); font-size: clamp(2.1rem, 4.4vw, 3.6rem); }
+  h2 { color: var(--blanco-rosado); font-size: var(--fs-h2); }
   .sub { margin-top: 16px; color: #e3cfc7; }
   .btns { display: flex; gap: 14px; flex-wrap: wrap; }
   .btn-line { border-color: var(--rosa-nude); color: var(--rosa-nude); }

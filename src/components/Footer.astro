@@ -1,14 +1,15 @@
 ---
 import { getAjustes, getServicios } from '../lib/wp';
-import { waLink, telLink } from '../lib/contact';
+import { waLink, telLink, agendaLink, agendaExterna } from '../lib/contact';
 import { u } from '../lib/url';
 import { servicioHref } from '../lib/images';
 const a = await getAjustes();
 const servicios = await getServicios();
-const destacados = ['odontologia-general', 'ortodoncia', 'rehabilitacion-oral', 'medicina-estetica'].map((s) => servicios.find((x) => x.slug === s)).filter(Boolean) as typeof servicios;
+const destacados = ['odontologia-general', 'ortodoncia', 'rehabilitacion-oral', 'estetica-facial'].map((s) => servicios.find((x) => x.slug === s)).filter(Boolean) as typeof servicios;
 const year = new Date().getFullYear();
 const redes = [a.instagram && { l: 'Instagram', h: a.instagram }, a.facebook && { l: 'Facebook', h: a.facebook }].filter(Boolean) as { l: string; h: string }[];
 const wa = waLink(a); const tel = telLink(a);
+const agenda = agendaLink(a, u('/contacto/')); const ext = agendaExterna(a);
 const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.email;
 ---
 <footer class="footer">
@@ -16,7 +17,7 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
     <div class="marca">
       <img src={u('/logo-armodent.svg')} alt="Armodent — Odontología y estética facial" width="281" height="59" />
       <p class="lema">Salud, bienestar y armonía.<br />Sin dejar de ser tú.</p>
-      <a href={u('/contacto/')} class="reservar">Reservar mi primera cita <span aria-hidden="true">→</span></a>
+      <a href={agenda} class="reservar" {...ext}>Reservar mi primera cita <span aria-hidden="true">→</span></a>
     </div>
     <nav aria-label="Sitio">
       <h4 class="eyebrow">Sitio</h4>
@@ -24,7 +25,7 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
     </nav>
     <nav aria-label="Servicios destacados">
       <h4 class="eyebrow">Cuidado integral</h4>
-      <ul>{destacados.map((s) => <li><a href={servicioHref(s.slug)}>{s.title}</a></li>)}</ul>
+      <ul>{destacados.map((s) => <li><a href={servicioHref(s.slug)}>{s.short ?? s.title}</a></li>)}</ul>
     </nav>
     {!hayContacto && (
       <div>
@@ -39,7 +40,8 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
           {a.direccion && <li>{a.direccion}</li>}
           {a.horario && <li>{a.horario}</li>}
           {a.telefono && <li><a href={tel}>{a.telefono}</a></li>}
-          {a.whatsapp && <li><a href={wa} rel="noopener">WhatsApp</a></li>}
+          {a.whatsapp && <li><a href={wa} target="_blank" rel="noopener">WhatsApp</a></li>}
+          {a.email && <li><a href={`mailto:${a.email}`}>{a.email}</a></li>}
         </ul>
       </div>
     )}
@@ -54,7 +56,7 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
   .footer::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 1px; background: linear-gradient(90deg, transparent, var(--rosa-cobre) 20%, var(--rosa-cobre) 80%, transparent); opacity: .55; }
   .grid { display: grid; grid-template-columns: 1.5fr 0.8fr 1fr 1fr; gap: clamp(28px, 4vw, 56px); padding-bottom: clamp(40px, 5vw, 64px); }
   .marca img { height: 59px; width: auto; }
-  .lema { font: italic 400 1.5rem/1.35 var(--f-titulo); color: var(--tinta); margin-top: 24px; max-width: 24ch; }
+  .lema { font: italic 400 1.4rem/1.35 var(--f-titulo); color: var(--tinta); margin-top: 24px; max-width: 24ch; }
   .reservar { display: inline-flex; gap: 8px; align-items: center; margin-top: 22px; font-size: 14.5px; font-weight: 500; color: var(--cobre-texto); border-bottom: 1px solid currentColor; padding-bottom: 3px; }
   .reservar:hover { color: var(--tinta); }
   h4 { margin-bottom: 18px; color: var(--cobre-texto); font-family: var(--f-texto); font-size: 11.5px; letter-spacing: .18em; }

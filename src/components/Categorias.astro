@@ -1,44 +1,37 @@
 ---
 import Icon from './Icon.astro';
-import Media from './Media.astro';
 import { getServicios } from '../lib/wp';
-import { categorias } from '../data/fallback';
-import { imagenCategoria, servicioHref } from '../lib/images';
+import { servicioHref } from '../lib/images';
 import { u } from '../lib/url';
 const todos = await getServicios();
-const tonos = { odontologia: 'nude', ortodoncia: 'palido', estetica: 'arena' } as const;
-const grupos = categorias.map((c, i) => ({ ...c, n: `0${i + 1}`, tono: tonos[c.id], items: todos.filter((s) => s.categoria === c.id), src: imagenCategoria[c.id] }));
+const tonos = ['nude', 'palido', 'arena'] as const;
 ---
-<div class="tiles">
-  {grupos.map((g) => (
-    <article class={`tile ${g.tono} reveal`}>
-      <div class="top">
-        <span class="n">{g.n}</span>
-        <div class="foto"><Media src={g.src} alt="" sizes="(max-width: 960px) 90vw, 420px" /></div>
-      </div>
-      <p class="eyebrow">{g.eyebrow}</p>
-      <h3>{g.title}</h3>
-      <p class="ex">{g.excerpt}</p>
-      <ul class="pills">{g.items.map((s) => <li><a href={servicioHref(s.slug)}>{s.title.replace(/ ·.*/, '')}</a></li>)}</ul>
-      <a href={u(`/servicios/#${g.id}`)} class="more">Ver {g.title.toLowerCase()} <Icon name="arrow" size={13} /></a>
-    </article>
-  ))}
+<div class="especialidades">
+  <ol class="lista">
+    {todos.map((s, i) => (
+      <li class={`item ${tonos[i % tonos.length]} reveal`}>
+        <a href={servicioHref(s.slug)}>
+          <span class="n">{String(i + 1).padStart(2, '0')}</span>
+          <span class="tx"><strong>{s.title}</strong><span class="ex">{s.excerpt}</span></span>
+          <span class="go" aria-hidden="true"><Icon name="arrow" size={14} /></span>
+        </a>
+      </li>
+    ))}
+  </ol>
+  <a href={u('/servicios/')} class="more">Ver todas las especialidades <Icon name="arrow" size={13} /></a>
 </div>
 <style>
-  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .tile { --pad: clamp(24px, 3vw, 36px); --borde: 12px; display: flex; flex-direction: column; padding: var(--pad); border-radius: 14px; color: var(--tinta); }
-  .tile.nude { background: var(--rosa-nude); } .tile.palido { background: var(--rosa-palido); } .tile.arena { background: #ead6c3; }
-  .top { position: relative; margin: calc(var(--borde) - var(--pad)) calc(var(--borde) - var(--pad)) 28px; }
-  .n { position: absolute; top: 14px; left: 22px; z-index: 1; font: italic 400 3rem/1 var(--f-titulo); color: #fff; text-shadow: 0 2px 14px rgb(58 42 38 / .45); }
-  .foto { width: 100%; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; }
-  .foto :global(img) { width: 100%; height: 100%; object-fit: cover; }
-  .eyebrow { color: #5a3a33; font-size: 11.5px; margin-bottom: 8px; }
-  h3 { font-size: 2.15rem; }
-  .ex { margin-top: 12px; color: #4a322d; max-width: 32ch; }
-  .pills { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 28px; }
-  .pills a { display: inline-block; padding: 10px 18px; border: 1px solid rgb(58 42 38 / .35); border-radius: 999px; font-size: 16px; transition: background .2s, color .2s, border-color .2s; }
-  .pills a:hover { background: var(--tinta); border-color: var(--tinta); color: var(--blanco-rosado); }
-  .more { margin-top: auto; display: inline-flex; align-items: center; gap: 10px; font-weight: 500; font-size: 15px; border-bottom: 1px solid currentColor; align-self: flex-start; padding-bottom: 3px; }
-  .more:hover { color: var(--terracota-hover); }
-  @media (max-width: 960px) { .tiles { grid-template-columns: 1fr; } }
+  .lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 24px; counter-reset: none; }
+  .item a { display: flex; align-items: flex-start; gap: 20px; height: 100%; padding: 24px 26px; border-radius: 12px; color: var(--tinta); transition: transform .3s, box-shadow .3s; }
+  .item a:hover { transform: translateY(-3px); box-shadow: 0 26px 44px -30px rgb(58 42 38 / .5); }
+  .item.nude a { background: var(--rosa-nude); } .item.palido a { background: var(--rosa-palido); } .item.arena a { background: #ead6c3; }
+  .n { font: italic 400 1.75rem/1 var(--f-titulo); color: #5a3a33; flex: none; min-width: 2.2ch; }
+  .tx { display: grid; gap: 6px; flex: 1; }
+  strong { font: 400 var(--fs-h3)/1.2 var(--f-titulo); }
+  .ex { color: #4a322d; font-size: 15px; max-width: 52ch; }
+  .go { flex: none; align-self: center; opacity: .65; transition: transform .2s, opacity .2s; }
+  .item a:hover .go { opacity: 1; transform: translate(2px, -2px); }
+  .more { margin-top: 36px; display: inline-flex; align-items: center; gap: 10px; font-weight: 500; font-size: 15px; border-bottom: 1px solid currentColor; padding-bottom: 3px; color: var(--cobre-texto); }
+  .more:hover { color: var(--tinta); }
+  @media (max-width: 860px) { .lista { grid-template-columns: 1fr; } }
 </style>

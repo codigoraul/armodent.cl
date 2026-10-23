@@ -1,8 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import { getServicios, getAjustes } from '../lib/wp';
-import { waLink, telLink } from '../lib/contact';
-import { categorias } from '../data/fallback';
+import { waLink, telLink, agendaLink, agendaExterna } from '../lib/contact';
 import { u } from '../lib/url';
 import { servicioHref } from '../lib/images';
 const { current = 'inicio' } = Astro.props;
@@ -10,7 +9,7 @@ const todos = await getServicios();
 const aj = await getAjustes();
 const tel = telLink(aj); const wa = waLink(aj);
 const redes = [aj.instagram && { l: 'Instagram', h: aj.instagram }, aj.facebook && { l: 'Facebook', h: aj.facebook }].filter(Boolean) as { l: string; h: string }[];
-const grupos = categorias.map((c) => ({ ...c, items: todos.filter((s) => s.categoria === c.id) }));
+const agenda = agendaLink(aj, u('/contacto/')); const ext = agendaExterna(aj);
 const nav = [
   { id: 'inicio', href: u('/'), label: 'Inicio' },
   { id: 'clinica', href: u('/la-clinica/'), label: 'La clínica' },
@@ -42,18 +41,16 @@ const nav = [
             <a href={n.href} class:list={['nav-link', { active: n.id === current }]} aria-current={n.id === current ? 'page' : undefined}>{n.label}</a>
             {n.menu && (
               <div class="mega"><div class="panel">
-                {grupos.map((g) => (
-                  <div>
-                    <p class="eyebrow">{g.title}</p>
-                    <ul>{g.items.map((s) => <li><a href={servicioHref(s.slug)}>{s.title}</a></li>)}</ul>
-                  </div>
-                ))}
+                <div>
+                  <p class="eyebrow">Especialidades y servicios</p>
+                  <ul class="dos">{todos.map((s) => <li><a href={servicioHref(s.slug)}>{s.short ?? s.title}</a></li>)}</ul>
+                </div>
               </div></div>
             )}
           </li>
         ))}
       </ul>
-      <a href={u('/contacto/')} class="btn btn-primary">Reservar cita <Icon name="arrow" size={14} /></a>
+      <a href={agenda} class="btn btn-primary" {...ext}>Reservar cita <Icon name="arrow" size={14} /></a>
     </nav>
     <button class="burger" aria-expanded="false" aria-controls="menu-movil" aria-label="Abrir menú"><span></span><span></span></button>
   </div>
@@ -66,12 +63,12 @@ const nav = [
             <summary>{n.label}<Icon name="plus" size={16} /></summary>
             <div class="sub">
               <a href={n.href}>Ver todos los servicios</a>
-              {grupos.map((g) => <><p class="eyebrow">{g.title}</p>{g.items.map((s) => <a href={servicioHref(s.slug)}>{s.title}</a>)}</>)}
+              {todos.map((s) => <a href={servicioHref(s.slug)}>{s.short ?? s.title}</a>)}
             </div>
           </details>
         </li>
       ) : <li><a href={n.href}>{n.label}</a></li>)}
-      <li><a href={u('/contacto/')} class="btn btn-primary">Reservar cita <Icon name="arrow" size={14} /></a></li>
+      <li><a href={agenda} class="btn btn-primary" {...ext}>Reservar cita <Icon name="arrow" size={14} /></a></li>
     </ul>
    </div>
   </div>
@@ -99,9 +96,10 @@ const nav = [
   .nav .btn-primary:hover { background: #8C4F63; color: #FFF4F0; }
   .mega { position: absolute; top: 100%; left: 50%; padding-top: 20px; transform: translate(-50%, 8px); opacity: 0; visibility: hidden; transition: opacity .2s, transform .2s, visibility .2s; z-index: 5; }
   .has-menu:hover .mega, .has-menu:focus-within .mega { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
-  .panel { display: grid; grid-template-columns: repeat(3, auto); gap: 40px; padding: 28px 34px; background: var(--fondo); border: 1px solid var(--linea); border-radius: 8px; box-shadow: 0 30px 60px -30px rgb(138 90 79 / 0.45); white-space: nowrap; }
+  .panel { display: grid; grid-template-columns: auto; gap: 40px; padding: 28px 34px; background: var(--fondo); border: 1px solid var(--linea); border-radius: 8px; box-shadow: 0 30px 60px -30px rgb(138 90 79 / 0.45); white-space: nowrap; }
   .panel .eyebrow { margin-bottom: 12px; font-size: 11.5px; }
   .panel ul { display: grid; gap: 2px; }
+  .panel ul.dos { grid-template-columns: repeat(2, auto); column-gap: 48px; grid-auto-flow: column; grid-template-rows: repeat(5, auto); }
   .panel li a { display: block; padding: 6px 0; font-size: 15px; color: var(--tinta); }
   .panel li a:hover { color: var(--terracota-hover); }
   .burger { display: none; width: 44px; height: 44px; border: 1px solid var(--linea); border-radius: 4px; background: transparent; cursor: pointer; position: relative; }

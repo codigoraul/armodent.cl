@@ -1,6 +1,6 @@
 ---
 import { getServicios } from '../lib/wp';
-const items = (await getServicios()).map((s) => s.title.replace(/ ·.*/, ''));
+const items = (await getServicios()).map((s) => s.short ?? s.title);
 ---
 <div class="ticker" aria-hidden="true">
   <div class="track">

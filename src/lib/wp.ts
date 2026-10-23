@@ -1,5 +1,5 @@
 import { servicios as fbServicios, faqs as fbFaqs, ajustes as fbAjustes } from '../data/fallback';
-import type { Servicio, Faq, Ajustes, CategoriaId, Paso } from '../data/fallback';
+import type { Servicio, Faq, Ajustes, Paso } from '../data/fallback';
 
 const WP = (import.meta.env.PUBLIC_WP_URL ?? '').replace(/\/$/, '');
 export const wpEnabled = WP.length > 0;
@@ -26,30 +26,12 @@ const decode = (s: string) =>
 const lines = (v: unknown) => String(v ?? '').split('\n').map((x) => x.trim()).filter(Boolean);
 const pairs = (v: unknown) => lines(v).map((l) => { const [a, ...b] = l.split('|'); return [a.trim(), b.join('|').trim()] as const; }).filter(([a, b]) => a && b);
 
+// Los textos, el orden y los nombres de los servicios viven en src/data/fallback.ts (validados con el cliente).
+// WordPress solo aporta, si existe un servicio con el mismo slug, su imagen destacada.
 export const getServicios = memo(async (): Promise<Servicio[]> => {
-  const data = await wp<any[]>('/wp/v2/servicio?per_page=50&_embed=wp:featuredmedia&orderby=menu_order&order=asc');
-  if (!data?.length) return fbServicios;
-  return data.map((p): Servicio => {
-    const fb = fbServicios.find((x) => x.slug === p.slug);
-    const m = p.meta ?? {};
-    const proceso: Paso[] = pairs(m.proceso).map(([t, d]) => ({ t, d }));
-    const faqs: Faq[] = pairs(m.faqs).map(([q, a]) => ({ q, a }));
-    const cuando = lines(m.cuando);
-    const html = (p.content?.rendered ?? '').trim();
-    return {
-      slug: p.slug,
-      categoria: ((m.categoria as CategoriaId) || fb?.categoria || 'odontologia'),
-      title: decode(strip(p.title?.rendered ?? '')),
-      excerpt: decode(strip(p.excerpt?.rendered ?? '')) || fb?.excerpt || '',
-      lead: m.lead || fb?.lead || '',
-      que: fb?.que ?? [],
-      html: html || undefined,
-      cuando: cuando.length ? cuando : fb?.cuando ?? [],
-      proceso: proceso.length ? proceso : fb?.proceso ?? [],
-      faqs: faqs.length ? faqs : fb?.faqs ?? [],
-      image: p._embedded?.['wp:featuredmedia']?.[0]?.source_url,
-    };
-  });
+  const data = await wp<any[]>('/wp/v2/servicio?per_page=50&_embed=wp:featuredmedia');
+  const imagenes = new Map<string, string>((data ?? []).map((p) => [p.slug, p._embedded?.['wp:featuredmedia']?.[0]?.source_url] as [string, string]));
+  return fbServicios.map((s) => ({ ...s, image: imagenes.get(s.slug) || undefined }));
 });
 
 export const getFaqs = memo(async (): Promise<Faq[]> => {
@@ -60,5 +42,7 @@ export const getFaqs = memo(async (): Promise<Faq[]> => {
 
 export const getAjustes = memo(async (): Promise<Ajustes> => {
   const data = await wp<Partial<Ajustes>>('/armodent/v1/ajustes');
-  return { ...fbAjustes, ...(data ?? {}) };
+  // Solo pisa los datos por defecto con lo que WordPress tenga realmente completado.
+  const llenos = Object.fromEntries(Object.entries(data ?? {}).filter(([, v]) => typeof v === 'string' && v.trim() !== ''));
+  return { ...fbAjustes, ...llenos };
 });

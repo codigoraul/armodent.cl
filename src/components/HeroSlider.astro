@@ -5,29 +5,33 @@ import bg1 from '../assets/fondo-clinica.jpg';
 import bg2 from '../assets/servicio-ortodoncia.jpg';
 import bg3 from '../assets/slide-clinica-elegante.jpg';
 import { u } from '../lib/url';
+import { getAjustes } from '../lib/wp';
+import { agendaLink, agendaExterna } from '../lib/contact';
+const aj = await getAjustes();
+const agenda = agendaLink(aj, u('/contacto/')); const ext = agendaExterna(aj);
 
 const slides = [
   {
     eyebrow: 'Odontología · Estética facial',
     title: 'Una sonrisa sana,<br />un rostro <em>en armonía.</em>',
     text: 'En ARMODENT cuidamos tu salud oral y la armonía de tu rostro en un espacio cálido, donde primero te escuchamos.',
-    cta: { label: 'Reservar mi primera cita', href: u('/contacto/') },
+    cta: { label: 'Reservar mi primera cita', href: agenda, ext },
     alt: { label: 'Ver servicios', href: u('/servicios/') },
     img: bg1, pos: '60% 35%',
   },
   {
     eyebrow: 'Ortodoncia',
     title: 'Alinear tu sonrisa,<br /><em>a tu medida.</em>',
-    text: 'Ortodoncia y ortodoncia invisible, con un plan claro que te explicamos paso a paso después de evaluar tu caso.',
-    cta: { label: 'Conocer ortodoncia', href: u('/servicios/ortodoncia/') },
-    alt: { label: 'Ortodoncia invisible', href: u('/servicios/ortodoncia-invisible/') },
+    text: 'Ortodoncia convencional y con alineadores transparentes, con un plan claro que te explicamos paso a paso después de evaluar tu caso.',
+    cta: { label: 'Conocer ortodoncia', href: u('/servicios/ortodoncia/'), ext: {} },
+    alt: { label: 'Ver servicios', href: u('/servicios/') },
     img: bg2, pos: '50% 45%',
   },
   {
-    eyebrow: 'Medicina estética',
+    eyebrow: 'Estética facial',
     title: 'Armonía facial,<br /><em>con mirada clínica.</em>',
-    text: 'Procedimientos estéticos indicados tras una valoración personalizada, buscando resultados naturales y acordes a ti.',
-    cta: { label: 'Medicina estética', href: u('/servicios/medicina-estetica/') },
+    text: 'Tratamientos mínimamente invasivos indicados tras una valoración personalizada, buscando resultados naturales y acordes a ti.',
+    cta: { label: 'Estética facial', href: u('/servicios/estetica-facial/'), ext: {} },
     alt: { label: 'Tu primera visita', href: u('/tu-primera-visita/') },
     img: bg3, pos: '50% 50%',
   },
@@ -49,7 +53,7 @@ const lines = (t: string) =>
           {i === 0 ? <h1 set:html={lines(s.title)} /> : <h2 class="h" set:html={lines(s.title)} />}
           <p class="txt rv">{s.text}</p>
           <div class="ctas rv">
-            <a href={s.cta.href} class="btn btn-primary" tabindex={i === 0 ? 0 : -1}>{s.cta.label} <Icon name="arrow" size={14} /></a>
+            <a href={s.cta.href} {...s.cta.ext} class="btn btn-primary" tabindex={i === 0 ? 0 : -1}>{s.cta.label} <Icon name="arrow" size={14} /></a>
             <a href={s.alt.href} class="btn btn-ghost" tabindex={i === 0 ? 0 : -1}>{s.alt.label} <Icon name="arrow" size={12} /></a>
           </div>
         </div>
@@ -74,7 +78,7 @@ const lines = (t: string) =>
   .bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(20 15 14 / .72), rgb(26 19 17 / .6) 55%, rgb(18 13 12 / .78)); }
   .in { position: relative; z-index: 1; display: grid; justify-items: center; gap: 22px; text-align: center; padding-block: 72px 96px; max-width: 880px; }
   .eyebrow { color: var(--rosa-nude); }
-  h1, .h { font-family: var(--f-titulo); font-weight: 400; font-size: clamp(2.5rem, 5.6vw, 4.6rem); line-height: 1.06; letter-spacing: -0.016em; color: #fff8f4; margin: 0; }
+  h1, .h { font-family: var(--f-titulo); font-weight: 400; font-size: var(--fs-hero); line-height: 1.06; letter-spacing: -0.016em; color: #fff8f4; margin: 0; }
   .in :global(em) { font-style: normal; color: var(--rosa-palido); }
   .txt { font-size: 1.2rem; max-width: 52ch; color: #eadbd4; }
   .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 16px; margin-top: 8px; }

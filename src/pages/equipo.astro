@@ -25,7 +25,7 @@ const lista = equipo.map((p, i) => ({
 
   <section class="section">
     <div class="wrap">
-      <div class="grid">
+      <div class:list={['grid', { solo: lista.length === 1 }]}>
         {lista.map((p) => (
           <article class="card reveal">
             <div class={`foto ${p.tono}`}>
@@ -35,6 +35,7 @@ const lista = equipo.map((p, i) => ({
             </div>
             <p class="eyebrow">{p.cargo}</p>
             <h3>{p.nombre}</h3>
+            {p.areas?.length ? <ul class="areas">{p.areas.map((a) => <li>{a}</li>)}</ul> : null}
             <p class="bio">{p.bio}</p>
           </article>
         ))}
@@ -46,13 +47,17 @@ const lista = equipo.map((p, i) => ({
 
 <style>
   .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .solo { grid-template-columns: minmax(0, 420px); }
+  .solo .bio { max-width: 52ch; }
   .card { display: flex; flex-direction: column; }
   .foto { aspect-ratio: 4 / 5; border-radius: 12px; overflow: hidden; display: grid; place-items: center; margin-bottom: 22px; }
   .foto.nude { background: var(--rosa-nude); } .foto.palido { background: var(--rosa-palido); } .foto.gris { background: #e3dfdc; }
   .foto :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }
   .ini { font: italic 400 4.2rem/1 var(--f-titulo); color: rgb(58 42 38 / .5); }
   .eyebrow { margin-bottom: 8px; }
-  h3 { font-size: 1.9rem; margin-bottom: 10px; }
+  h3 { font-size: var(--fs-h3); margin-bottom: 14px; }
+  .areas { display: flex; flex-wrap: wrap; margin-bottom: 16px; font-size: 15.5px; color: var(--tinta); }
+  .areas li:not(:last-child)::after { content: '·'; margin-inline: 10px; color: var(--terracota); }
   .bio { color: var(--tinta-suave); max-width: 38ch; }
   @media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }

@@ -5,8 +5,7 @@ import Icon from '../../components/Icon.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import HeroBg from '../../components/HeroBg.astro';
 import { getServicios } from '../../lib/wp';
-import { categorias } from '../../data/fallback';
-import { imagenCategoria, imagenDeServicio, servicioHref } from '../../lib/images';
+import { imagenDeServicio, servicioHref } from '../../lib/images';
 import { u } from '../../lib/url';
 
 export async function getStaticPaths() {
@@ -14,10 +13,7 @@ export async function getStaticPaths() {
   return todos.map((s) => ({ params: { slug: s.slug }, props: { s, todos } }));
 }
 const { s, todos } = Astro.props;
-const cat = categorias.find((c) => c.id === s.categoria)!;
-const hermanos = todos.filter((x) => x.categoria === s.categoria);
-const otros = todos.filter((x) => x.categoria !== s.categoria);
-const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
+const img = s.image ?? imagenDeServicio(s.slug).src;
 ---
 <Page title={`${s.title} · ARMODENT`} description={s.excerpt} current="servicios">
     <section class="hero dark-hero">
@@ -25,9 +21,9 @@ const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
       <div class="wrap grid">
         <div class="copy">
           <nav class="crumbs" aria-label="Ruta">
-            <a href={u('/')}>Inicio</a><span>/</span><a href={u('/servicios/')}>Servicios</a><span>/</span><span aria-current="page">{s.title}</span>
+            <a href={u('/')}>Inicio</a><span>/</span><a href={u('/servicios/')}>Servicios</a><span>/</span><span aria-current="page">{s.short ?? s.title}</span>
           </nav>
-          <p class="eyebrow">{cat.title} · {cat.eyebrow}</p>
+          <p class="eyebrow">Especialidades y servicios</p>
           <h1>{s.title}</h1>
           <p class="lead">{s.lead}</p>
         </div>
@@ -47,10 +43,10 @@ const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
         <aside class="lateral">
           <div class="foto"><Media src={img} alt="" sizes="(max-width: 900px) 90vw, 560px" /></div>
           <div class="box">
-            <p class="eyebrow">{cat.title}</p>
+            <p class="eyebrow">Especialidades y servicios</p>
             <ul>
-              {hermanos.map((h) => (
-                <li><a href={servicioHref(h.slug)} aria-current={h.slug === s.slug ? 'page' : undefined} class:list={{ on: h.slug === s.slug }}><span>{h.title}</span><Icon name="arrow" size={12} /></a></li>
+              {todos.map((h) => (
+                <li><a href={servicioHref(h.slug)} aria-current={h.slug === s.slug ? 'page' : undefined} class:list={{ on: h.slug === s.slug }}><span>{h.short ?? h.title}</span><Icon name="arrow" size={12} /></a></li>
               ))}
             </ul>
           </div>
@@ -98,14 +94,6 @@ const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
       </section>
     )}
 
-    <section class="section otros">
-      <div class="wrap">
-        <p class="eyebrow">Otros servicios</p>
-        <ul class="chips">
-          {otros.map((o) => <li><a href={servicioHref(o.slug)}>{o.title}</a></li>)}
-        </ul>
-      </div>
-    </section>
     <CtaBand />
 </Page>
 
@@ -115,7 +103,7 @@ const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
   .crumbs { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; margin-bottom: 4px; }
   .crumbs a:hover { text-decoration: underline; }
   .copy { display: grid; gap: 8px; align-content: center; }
-  h1 { font-size: clamp(1.9rem, 3.4vw, 2.8rem); line-height: 1.1; letter-spacing: -0.012em; }
+  h1 { font-size: var(--fs-h1); line-height: 1.1; letter-spacing: -0.012em; }
   .lead { font-size: 1.02rem; max-width: 62ch; }
   .ctas { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; margin-top: 10px; }
   .foto { aspect-ratio: 4 / 3; border-radius: 6px; overflow: hidden; background: var(--nude-suave); }
@@ -139,7 +127,7 @@ const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
   .box li a:hover, .box li a.on { color: var(--terracota-hover); }
   .box li a.on { font-weight: 500; }
   .cta { background: var(--rosa-nude); border-color: transparent; display: grid; gap: 10px; }
-  .cta h3 { font-size: 1.6rem; } .cta p { color: var(--tinta-suave); font-size: 15px; } .cta .btn { margin-top: 8px; justify-self: start; }
+  .cta h3 { font-size: var(--fs-h3); } .cta p { color: var(--tinta-suave); font-size: 15px; } .cta .btn { margin-top: 8px; justify-self: start; }
 
   .cuando { background: var(--nude-suave); padding-block: clamp(56px, 8vw, 100px); }
   .grid3 { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
@@ -152,8 +140,8 @@ const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
   .pasos-t { margin: 16px 0 48px; }
   .pasos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
   .pasos li { border-top: 1px solid var(--rosa-cobre); padding-top: 22px; }
-  .n { font: italic 400 2rem/1 var(--f-titulo); color: var(--terracota); display: block; margin-bottom: 18px; }
-  .pasos h3 { font-size: 1.7rem; margin-bottom: 12px; } .pasos p { color: var(--tinta-suave); max-width: 34ch; }
+  .n { font: italic 400 1.9rem/1 var(--f-titulo); color: var(--terracota); display: block; margin-bottom: 18px; }
+  .pasos h3 { font-size: var(--fs-h3); margin-bottom: 12px; } .pasos p { color: var(--tinta-suave); max-width: 34ch; }
 
   .faqs { background: var(--blanco-rosado); padding-block: clamp(56px, 8vw, 100px); border-block: 1px solid var(--linea); }
   details { border-bottom: 1px solid var(--linea); } details:first-child { border-top: 1px solid var(--linea); }
@@ -163,10 +151,6 @@ const img = s.image ?? imagenDeServicio(s.slug, s.categoria).src;
   details[open] summary :global(svg) { transform: rotate(45deg); }
   .resp { padding: 0 48px 24px 0; color: var(--tinta-suave); max-width: 60ch; }
 
-  .otros .eyebrow { margin-bottom: 18px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-  .chips a { display: inline-block; padding: 11px 18px; border: 1px solid var(--rosa-cobre); border-radius: 999px; font-size: 14.5px; transition: background .2s, color .2s, border-color .2s; }
-  .chips a:hover { background: var(--terracota-profundo); border-color: var(--terracota-profundo); color: #fff; }
 
   @media (max-width: 900px) {
     .grid, .grid2, .grid3 { grid-template-columns: 1fr; }

@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import { getAjustes, getServicios, contactEndpoint } from '../lib/wp';
-import { waLink, telLink } from '../lib/contact';
+import { waLink, telLink, mapaQuery } from '../lib/contact';
 const a = await getAjustes();
 const servicios = await getServicios();
 const motivos = [{ v: 'Primera visita / valoración', slug: 'primera-visita' }, ...servicios.map((s) => ({ v: s.title, slug: s.slug })), { v: 'Otro motivo', slug: 'otro' }];
@@ -10,63 +10,80 @@ const datos = [
   { icon: 'pin', t: 'Dónde encontrarnos', v: a.direccion || 'Dirección de la clínica · por confirmar' },
   { icon: 'phone', t: 'Contacto directo', v: a.telefono || a.whatsapp || 'Teléfono / WhatsApp · por confirmar', href: wa || tel },
   { icon: 'clock', t: 'Horario de atención', v: a.horario || 'Días y horarios · por confirmar' },
+  ...(a.email ? [{ icon: 'mail', t: 'Correo electrónico', v: a.email, href: `mailto:${a.email}` }] : []),
 ];
+const mapa = a.direccion ? `https://www.google.com/maps?q=${mapaQuery(a)}&hl=es&z=16&output=embed` : '';
+const comoLlegar = a.direccion ? `https://www.google.com/maps/search/?api=1&query=${mapaQuery(a)}` : '';
 ---
 <section class="section contacto" id="formulario">
-  <div class="wrap grid">
-    <div class="info reveal">
+  <div class="wrap">
+    <header class="intro reveal">
       <p class="eyebrow">Escríbenos</p>
       <h2 class="section-title">Cuéntanos qué necesitas.</h2>
       <p class="lede">Déjanos tu motivo de consulta y te contactaremos para coordinar tu primera visita.</p>
-      <ul>
-        {datos.map((d) => (
-          <li>
-            <span class="ic"><Icon name={d.icon} size={22} /></span>
-            <div><strong>{d.t}</strong>{d.href ? <a href={d.href}>{d.v}</a> : <span>{d.v}</span>}</div>
-          </li>
-        ))}
-      </ul>
-      {wa && <a href={wa} class="btn btn-outline" rel="noopener">Escribir por WhatsApp</a>}
+    </header>
+
+    <div class:list={['duo', { solo: !mapa }]}>
+      <form class="form reveal" id="form-contacto" novalidate data-endpoint={contactEndpoint}>
+        <div class="form-head"><h3>Solicita tu cita</h3></div>
+        <div class="row">
+          <label>Nombre<input name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" required /></label>
+          <label>Teléfono<input name="telefono" type="tel" autocomplete="tel" placeholder="Tu número de contacto" required /></label>
+        </div>
+        <label>Correo electrónico<input name="email" type="email" autocomplete="email" placeholder="Tu correo electrónico" required /></label>
+        <label>Motivo de consulta
+          <select name="motivo" required>
+            <option value="" disabled selected>Selecciona un servicio</option>
+            {motivos.map((m) => <option value={m.v} data-slug={m.slug}>{m.v}</option>)}
+          </select>
+        </label>
+        <label>¿En qué podemos ayudarte?<textarea name="mensaje" rows="4" placeholder="Cuéntanos brevemente tu consulta"></textarea></label>
+        <label class="hp" aria-hidden="true">No completar<input name="web" type="text" tabindex="-1" autocomplete="off" /></label>
+        <label class="check"><input type="checkbox" name="consentimiento" required /><span>Acepto que ARMODENT use estos datos solo para responder mi consulta y coordinar mi cita.</span></label>
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Solicitar mi cita <Icon name="arrow" size={14} /></button>
+          <p class="status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+      {mapa && (
+        <div class="mapa reveal" aria-label="Ubicación de la clínica">
+          <iframe src={mapa} title={`Mapa: ${a.direccion}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          <a href={comoLlegar} class="btn btn-light abrir" target="_blank" rel="noopener">Abrir en Google Maps <Icon name="arrow" size={14} /></a>
+        </div>
+      )}
     </div>
 
-    <form class="form reveal" id="form-contacto" novalidate data-endpoint={contactEndpoint}>
-      <div class="form-head"><h3>Solicita tu cita</h3></div>
-      <div class="row">
-        <label>Nombre<input name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" required /></label>
-        <label>Teléfono<input name="telefono" type="tel" autocomplete="tel" placeholder="Tu número de contacto" required /></label>
-      </div>
-      <label>Correo electrónico<input name="email" type="email" autocomplete="email" placeholder="Tu correo electrónico" required /></label>
-      <label>Motivo de consulta
-        <select name="motivo" required>
-          <option value="" disabled selected>Selecciona un servicio</option>
-          {motivos.map((m) => <option value={m.v} data-slug={m.slug}>{m.v}</option>)}
-        </select>
-      </label>
-      <label>¿En qué podemos ayudarte?<textarea name="mensaje" rows="4" placeholder="Cuéntanos brevemente tu consulta"></textarea></label>
-      <label class="hp" aria-hidden="true">No completar<input name="web" type="text" tabindex="-1" autocomplete="off" /></label>
-      <label class="check"><input type="checkbox" name="consentimiento" required /><span>Acepto que ARMODENT use estos datos solo para responder mi consulta y coordinar mi cita.</span></label>
-      <div class="actions">
-        <button type="submit" class="btn btn-primary">Solicitar mi cita <Icon name="arrow" size={14} /></button>
-        <p class="status" role="status" aria-live="polite"></p>
-      </div>
-    </form>
+    <ul class="datos reveal">
+      {datos.map((d) => (
+        <li>
+          <span class="ic"><Icon name={d.icon} size={22} /></span>
+          <div><strong>{d.t}</strong>{d.href ? <a href={d.href}>{d.v}</a> : <span>{d.v}</span>}</div>
+        </li>
+      ))}
+    </ul>
+    {wa && <a href={wa} class="btn btn-outline wa" target="_blank" rel="noopener">Escribir por WhatsApp</a>}
   </div>
 </section>
 
 <style>
   .contacto { background: linear-gradient(180deg, var(--fondo), var(--nude-suave)); }
-  .grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
-  .info .eyebrow { margin-bottom: 18px; } .info .lede { margin-top: 22px; }
-  ul { margin: 40px 0 32px; display: grid; gap: 22px; }
-  li { display: flex; gap: 16px; align-items: flex-start; }
+  .intro { display: grid; gap: 14px; margin-bottom: 36px; }
+  .duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(16px, 2.4vw, 32px); align-items: stretch; }
+  .duo.solo { grid-template-columns: minmax(0, 640px); }
+  .mapa { position: relative; min-height: 460px; border: 1px solid var(--linea); border-radius: 8px; overflow: hidden; background: var(--blanco-rosado); box-shadow: 0 30px 60px -40px rgb(138 90 79 / 0.5); }
+  .mapa iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: saturate(.85) sepia(.12); }
+  .mapa .abrir { position: absolute; left: 16px; bottom: 16px; padding: 12px 20px; font-size: 14px; box-shadow: 0 10px 24px -12px rgb(58 42 38 / .5); }
+  .datos { margin: 104px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px 32px; }
+  .datos li { display: flex; gap: 14px; align-items: flex-start; }
   .ic { color: var(--terracota); margin-top: 2px; }
-  li strong { display: block; font-weight: 500; font-size: 15.5px; }
-  li span, li a { color: var(--tinta-suave); font-size: 15px; } li a:hover { color: var(--terracota-hover); text-decoration: underline; }
-  .form { background: var(--blanco-rosado); border: 1px solid var(--linea); border-radius: 8px; padding: clamp(24px, 4vw, 44px); display: grid; gap: 18px; box-shadow: 0 30px 60px -40px rgb(138 90 79 / 0.5); }
-  .form-head h3 { font-size: 1.9rem; }
+  .datos strong { display: block; font-weight: 500; font-size: 15.5px; }
+  .datos li span, .datos li a { color: var(--tinta-suave); font-size: 15px; } .datos li a:hover { color: var(--terracota-hover); text-decoration: underline; }
+  .wa { margin-top: 32px; }
+  .form { background: #fff; border: 1px solid var(--linea); border-radius: 8px; padding: clamp(24px, 4vw, 44px); display: grid; gap: 18px; box-shadow: 0 30px 60px -40px rgb(138 90 79 / 0.5); }
+  .form-head h3 { font-size: var(--fs-h3); }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   label { display: grid; gap: 7px; font-size: 13.5px; font-weight: 500; color: var(--tinta); }
-  input, select, textarea { font: 400 16px/1.4 var(--f-texto); color: var(--tinta); background: #fff; border: 1px solid #dcc3b9; border-radius: 4px; padding: 14px; width: 100%; transition: border-color .2s, box-shadow .2s; }
+  input, select, textarea { font: 400 16px/1.4 var(--f-texto); color: var(--tinta); background: #fbf4f0; border: 1px solid #dcc3b9; border-radius: 4px; padding: 14px; width: 100%; transition: border-color .2s, box-shadow .2s; }
   input::placeholder, textarea::placeholder { color: #9a8079; }
   input:focus, select:focus, textarea:focus { outline: none; border-color: var(--terracota); box-shadow: 0 0 0 3px rgb(196 116 106 / 0.2); }
   input[aria-invalid='true'], select[aria-invalid='true'] { border-color: #b3261e; }
@@ -77,7 +94,7 @@ const datos = [
   .actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
   .status { font-size: 14px; color: var(--tinta-suave); } .status.ok { color: #2f6b45; } .status.err { color: #b3261e; }
   button[disabled] { opacity: .6; cursor: wait; }
-  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .row { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .duo, .duo.solo { grid-template-columns: 1fr; } .mapa { min-height: 340px; } .row { grid-template-columns: 1fr; } }
 </style>
 
 <script>

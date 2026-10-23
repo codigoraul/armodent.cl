@@ -20,7 +20,6 @@ add_action('init', function () {
     'supports' => ['title', 'editor', 'page-attributes'],
   ]);
   $campos = [
-    'categoria' => 'Categoría: odontologia, ortodoncia o estetica',
     'lead'      => 'Bajada de la página (una o dos frases)',
     'cuando'    => 'Cuándo consultar: una frase por línea',
     'proceso'   => 'Cómo trabajamos: una línea por paso, con formato Título | Descripción',
@@ -87,7 +86,7 @@ add_action('rest_api_init', function () {
       set_transient($key, $n + 1, HOUR_IN_SECONDS);
 
       $to = get_option('armodent_ajustes', [])['email'] ?? '';
-      if (!is_email($to)) $to = get_option('admin_email');
+      if (!is_email($to)) $to = 'contacto@armodent.cl';
       $body = "Nombre: $nombre\nTeléfono: $tel\nCorreo: $email\nMotivo: $motivo\n\nMensaje:\n$msg\n";
       $ok = wp_mail($to, "Nueva consulta web — $nombre", $body, ["Reply-To: $nombre <$email>"]);
       return $ok ? ['ok' => true] : new WP_Error('envio', 'No se pudo enviar', ['status' => 500]);

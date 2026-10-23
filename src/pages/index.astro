@@ -30,8 +30,8 @@ const pasos = [
   <section class="section">
     <div class="wrap">
       <header class="head reveal">
-        <div><p class="eyebrow">Servicios</p><h2 class="section-title">Tres formas<br />de cuidarte.</h2></div>
-        <p class="lede">Cada área reúne tratamientos pensados para necesidades distintas. Elige por dónde empezar.</p>
+        <div><p class="eyebrow">Servicios</p><h2 class="section-title">Especialidades<br />y servicios.</h2></div>
+        <p class="lede">Atención pensada para necesidades distintas. Elige por dónde empezar.</p>
       </header>
       <Categorias />
       <p class="note">La indicación de cada tratamiento requiere una evaluación clínica individual.</p>
@@ -71,7 +71,7 @@ const pasos = [
         <p class="eyebrow">Estética facial</p>
         <h2 class="section-title">Realzar tu expresión,<br />respetando tu esencia.</h2>
         <p>Una mirada individual que considera tus rasgos, tus expectativas y tu bienestar, sin promesas de resultados idénticos entre personas.</p>
-        <a href={u('/servicios/medicina-estetica/')} class="btn btn-outline">Conocer medicina estética <Icon name="arrow" size={14} /></a>
+        <a href={u('/servicios/estetica-facial/')} class="btn btn-outline">Conocer estética facial <Icon name="arrow" size={14} /></a>
         <small>Cada procedimiento está sujeto a valoración e indicación profesional.</small>
       </div>
       <div class="efoto reveal"><div class="arch"><Media src={estetica} alt="Paciente con expresión serena" sizes="(max-width: 900px) 80vw, 420px" /></div></div>
@@ -101,8 +101,8 @@ const pasos = [
   .txt .btn { justify-self: start; }
   .pasos ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
   .pasos li { border-top: 1px solid var(--rosa-cobre); padding-top: 22px; }
-  .n { font: italic 400 2.2rem/1 var(--f-titulo); color: var(--terracota); display: block; margin-bottom: 18px; }
-  .pasos h3 { font-size: 1.8rem; margin-bottom: 10px; } .pasos li p { color: var(--tinta-suave); max-width: 32ch; }
+  .n { font: italic 400 2.1rem/1 var(--f-titulo); color: var(--terracota); display: block; margin-bottom: 18px; }
+  .pasos h3 { font-size: var(--fs-h3); margin-bottom: 10px; } .pasos li p { color: var(--tinta-suave); max-width: 32ch; }
   .estetica { background: var(--rosa-palido); padding-block: clamp(56px, 8vw, 110px); }
   .egrid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
   .etxt { display: grid; gap: 22px; max-width: 54ch; } .etxt .eyebrow { color: #5a3a33; } .etxt > p { color: #4a322d; }

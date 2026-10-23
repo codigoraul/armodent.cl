@@ -3,8 +3,8 @@
 Sitio web en Astro 5 (estático) con paleta "Rosa y calidez", títulos en **Big Caslon** y texto en Jost.
 
 ## Páginas
-- `/` Inicio · `/la-clinica/` · `/servicios/` (con 12 páginas `/servicios/<nombre>/`) · `/tu-primera-visita/` · `/contacto/`
-- El menú muestra un submenú con todos los servicios. Los textos de cada servicio están en `src/data/fallback.ts`.
+- `/` Inicio · `/la-clinica/` · `/servicios/` (listado simple de 10 especialidades, cada una con su página `/servicios/<nombre>/`) · `/tu-primera-visita/` · `/contacto/`
+- El menú muestra un submenú con todas las especialidades. Los textos de cada servicio están en `src/data/fallback.ts`.
 - Se genera `sitemap-index.xml` y `robots.txt` automáticamente.
 
 ## Uso
@@ -17,7 +17,7 @@ npm run build            # genera /dist
 
 ## WordPress headless
 1. Copia `wordpress/armodent-headless.php` a `wp-content/plugins/armodent-headless/` y actívalo.
-2. Crea **Servicios**: el título, el extracto (texto de la tarjeta), la imagen destacada y el orden salen de los campos normales; el contenido del editor es el texto "En qué consiste". Campos personalizados: `categoria` (`odontologia`, `ortodoncia` o `estetica`), `lead`, `cuando` (una frase por línea), `proceso` (`Título | Descripción`, una línea por paso) y `faqs` (`Pregunta | Respuesta`, una por línea). Lo que quede vacío se completa con el texto de `src/data/fallback.ts` si el slug coincide. También hay **Preguntas frecuentes** para la landing.
+2. Los **Servicios** (textos, orden y nombres) se editan en `src/data/fallback.ts`. En WordPress, si creas un servicio con el mismo slug y le pones imagen destacada, el sitio usa esa imagen. También hay **Preguntas frecuentes** para la landing.
    Cada servicio genera su página en `/servicios/<slug>/`.
 3. Completa **Ajustes > Armodent** (dirección, teléfono, WhatsApp, correo que recibe consultas, horario, redes).
 4. Pon la URL de WordPress en `PUBLIC_WP_URL` y reconstruye (`npm run build`). Si WP no responde, el sitio usa `src/data/fallback.ts`.
