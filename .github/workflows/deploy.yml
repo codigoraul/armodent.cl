@@ -27,8 +27,22 @@ jobs:
           PUBLIC_WP_URL: https://armodent.cl/admin
           DEPLOY_BASE: /prueba
 
-      - name: Evitar indexación de /prueba
-        run: printf '<IfModule mod_headers.c>\n  Header set X-Robots-Tag "noindex, nofollow"\n</IfModule>\n' > dist/.htaccess
+      - name: .htaccess (HTTPS + evitar indexación de /prueba)
+        run: |
+          cat > dist/.htaccess <<'HTACCESS'
+          # Forzar HTTPS
+          <IfModule mod_rewrite.c>
+            RewriteEngine On
+            RewriteCond %{HTTPS} !=on
+            RewriteCond %{HTTP:X-Forwarded-Proto} !https
+            RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+          </IfModule>
+
+          # No indexar /prueba
+          <IfModule mod_headers.c>
+            Header set X-Robots-Tag "noindex, nofollow"
+          </IfModule>
+          HTACCESS
 
       - name: Subir por FTP (lftp)
         env:
