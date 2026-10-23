@@ -19,9 +19,9 @@ const todos = await getServicios();
 
   <section class="section">
     <div class="wrap">
-      <ol class="lista">
+      <ol class="lista" id="lista-servicios">
         {todos.map((s, i) => { const im = s.image ? { src: s.image, pos: '50% 40%' } : imagenDeServicio(s.slug); return (
-          <li class="reveal">
+          <li class:list={['reveal', { extra: i >= 8 }]}>
             <a href={servicioHref(s.slug)} class="card" aria-label={s.title}>
               <span class="ph" style={`--cpos:${im.pos}`}><Media src={im.src} alt="" sizes="(max-width: 600px) 90vw, 260px" /></span>
               <span class="n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
@@ -34,15 +34,34 @@ const todos = await getServicios();
           </li>
         ); })}
       </ol>
+      {todos.length > 8 && (
+        <div class="mas">
+          <button type="button" class="btn btn-outline" id="ver-mas" aria-expanded="false" aria-controls="lista-servicios">Ver más especialidades <Icon name="plus" size={14} /></button>
+        </div>
+      )}
+      <noscript><style is:inline set:html=".extra{display:list-item!important}.mas{display:none}"></style></noscript>
       <p class="nota">La indicación de cada tratamiento requiere una evaluación clínica individual.</p>
     </div>
   </section>
   <CtaBand titulo="¿No sabes por dónde empezar?<br />Te orientamos." texto="Cuéntanos qué te preocupa y te ayudamos a elegir el primer paso." />
 </Page>
 
+<script>
+  const btn = document.getElementById('ver-mas');
+  const lista = document.getElementById('lista-servicios');
+  btn?.addEventListener('click', () => {
+    lista?.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    btn.parentElement?.remove();
+    lista?.querySelectorAll('.extra .reveal, .extra').forEach((el) => el.classList.add('in'));
+  });
+</script>
+
 <style>
   .lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2vw, 28px); }
   .lista li { list-style: none; }
+  .lista:not(.open) .extra { display: none; }
+  .mas { display: flex; justify-content: center; margin-top: 40px; }
   .card { position: relative; display: flex; flex-direction: column; height: 100%; border-radius: 14px; overflow: hidden; color: var(--tinta); background: #fffaf7; box-shadow: 0 1px 0 rgb(138 75 64 / .08), 0 18px 40px -28px rgb(58 42 38 / .5); transition: transform .3s, box-shadow .3s; }
   .card:hover, .card:focus-visible { transform: translateY(-4px); box-shadow: 0 1px 0 rgb(138 75 64 / .1), 0 30px 54px -30px rgb(58 42 38 / .55); }
   .ph { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--nude-suave); }
