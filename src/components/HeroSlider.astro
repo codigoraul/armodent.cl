@@ -78,7 +78,7 @@ const lines = (t: string) =>
   .bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(20 15 14 / .72), rgb(26 19 17 / .6) 55%, rgb(18 13 12 / .78)); }
   .in { position: relative; z-index: 1; display: grid; justify-items: center; gap: 22px; text-align: center; padding-block: 72px 96px; max-width: 880px; }
   .eyebrow { color: var(--rosa-nude); }
-  h1, .h { font-family: var(--f-titulo); font-weight: 400; font-size: var(--fs-hero); line-height: 1.06; letter-spacing: -0.016em; color: #fff8f4; margin: 0; }
+  h1, .h { font-family: var(--f-titulo); font-weight: 400; font-size: clamp(2.5rem, 5.6vw, 4.6rem); line-height: 1.06; letter-spacing: -0.016em; color: #fff8f4; margin: 0; text-wrap: wrap; }
   .in :global(em) { font-style: normal; color: var(--rosa-palido); }
   .txt { font-size: 1.2rem; max-width: 52ch; color: #eadbd4; }
   .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 16px; margin-top: 8px; }
@@ -95,6 +95,8 @@ const lines = (t: string) =>
 
   /* ── Animaciones de entrada del texto (se reproducen cada vez que una diapositiva se activa) ── */
   :global(.slider) { --ease: cubic-bezier(.22, .8, .24, 1); }
+  /* Las líneas se inyectan con set:html y no reciben el alcance de Astro: cada una debe ser un bloque propio */
+  :global(.ln) { display: block; }
   .ln { display: block; overflow: hidden; padding-bottom: .14em; margin-bottom: -.14em; }
   .li { display: block; transform: translateY(112%); opacity: 0; }
   .rv { opacity: 0; transform: translateY(18px); }

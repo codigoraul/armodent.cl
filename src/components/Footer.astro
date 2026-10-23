@@ -49,7 +49,8 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
   <div class="wrap legal">
     <p>© {year} ARMODENT · Odontología y estética facial</p>
     {redes.length > 0 && <p>{redes.map((r, i) => <><a href={r.h} rel="noopener" target="_blank">{r.l}</a>{i < redes.length - 1 ? ' · ' : ''}</>)}</p>}
-  </div>
+      <p class="credito">Diseño web por <a href="https://xn--diseopaginas-dhb.cl" target="_blank" rel="noopener">DiseñoPaginas.cl</a></p>
+</div>
 </footer>
 <style>
   .footer { position: relative; background: linear-gradient(180deg, #f8eee9 0%, #f1e1d8 100%); padding-top: clamp(56px, 7vw, 96px); color: var(--tinta); }
@@ -63,6 +64,7 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
   ul { display: grid; gap: 11px; font-size: 15.5px; color: var(--tinta); }
   li a { transition: color .2s; } li a:hover { color: var(--cobre-texto); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
   .legal { border-top: 1px solid rgb(138 75 64 / 0.2); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 24px; font-size: 13px; color: var(--tinta-suave); }
+  .credito a { color: var(--cobre-texto); }
   .legal a:hover { color: var(--cobre-texto); text-decoration: underline; }
   @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } .marca { grid-column: 1 / -1; } }
   @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }

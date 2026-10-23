@@ -29,7 +29,6 @@
 
   /* Big Caslon es fuente de sistema en macOS/iOS; Libre Caslon Text la reemplaza en el resto */
   /* Escala tipográfica: cada nivel tiene mínimo y máximo claros */
-  --fs-hero: clamp(2.4rem, 5vw, 4rem);   /* slider de inicio */
   --fs-h1: clamp(1.9rem, 3.3vw, 2.6rem);     /* título de cada página */
   --fs-h2: clamp(1.9rem, 3.6vw, 2.95rem);    /* títulos de sección y banda final */
   --fs-h3: clamp(1.4rem, 1.8vw, 1.75rem);    /* tarjetas */
