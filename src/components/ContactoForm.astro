@@ -94,6 +94,8 @@ const comoLlegar = a.direccion ? `https://www.google.com/maps/search/?api=1&quer
   .actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
   .status { font-size: 14px; color: var(--tinta-suave); } .status.ok { color: #2f6b45; } .status.err { color: #b3261e; }
   button[disabled] { opacity: .6; cursor: wait; }
+  .actions .btn-primary { background: #111827; color: var(--rosa-nude); text-shadow: none; font-weight: 500; }
+  .actions .btn-primary:hover { background: #1f2937; color: #fff; }
   @media (max-width: 900px) { .duo, .duo.solo { grid-template-columns: 1fr; } .mapa { min-height: 340px; } .row { grid-template-columns: 1fr; } }
 </style>
 

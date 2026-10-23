@@ -18,6 +18,7 @@
   --nude-suave: #f3dfd6;
   --nude-hero: #efd3c8;
   --tinta: #3a2a26;
+  --negro: #111827; /* negro del logo: títulos */
   --tinta-suave: #523a33;
   --cobre-texto: #8a4b40;
   --terracota-profundo: #cc8791; /* botones: texto blanco, contraste AA */
@@ -52,7 +53,7 @@ body {
 }
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
-h1, h2, h3, h4 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; letter-spacing: -0.012em; margin: 0; color: var(--tinta); text-wrap: balance; }
+h1, h2, h3, h4 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; letter-spacing: -0.012em; margin: 0; color: var(--negro); text-wrap: balance; }
 p { margin: 0; }
 ul { margin: 0; padding: 0; list-style: none; }
 :focus-visible { outline: 2px solid var(--terracota); outline-offset: 3px; border-radius: 3px; }
@@ -61,6 +62,11 @@ ul { margin: 0; padding: 0; list-style: none; }
 .eyebrow { font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cobre-texto); font-weight: 600; }
 .section { padding-block: clamp(64px, 9vw, 120px); }
 .section-title { font-size: var(--fs-h2); max-width: 36ch; }
+.section-dark { background: #2a1d1a; color: #eadbd4; }
+.section-dark .eyebrow { color: var(--rosa-nude); }
+.section-dark .section-title, .section-dark h2 { color: var(--blanco-rosado); }
+.section-dark .lede { color: #d9c6bd; }
+.section-dark p.note { color: #cdb9b0; }
 .lede { color: var(--tinta-suave); font-size: 1.05rem; max-width: 46ch; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
@@ -78,6 +84,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 .btn-ghost:hover { color: var(--terracota-hover); }
 .btn-outline { border-color: var(--tinta); color: var(--tinta); }
 .btn-outline:hover { background: var(--tinta); color: var(--blanco-rosado); }
+.btn-dark { background: #1f1715; border-color: var(--rosa-cobre); color: var(--rosa-nude); font-weight: 500; }
+.btn-dark:hover { background: #3a2926; color: #fff; }
 .btn-light { background: var(--blanco-rosado); color: var(--cafe-oscuro); }
 .btn-light:hover { background: #fff; }
 
