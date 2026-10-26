@@ -22,7 +22,7 @@
   --tinta-suave: #4d525d;
   --cobre-texto: #111827;
   --terracota-profundo: #fab190; /* botones: durazno, texto negro (contraste AAA) */
-  --btn-hover: #f3a382;
+  --btn-hover: #fdbd99;
   --terracota-hover: #4d525d;
   --cafe-oscuro: #111827;
   --linea: rgb(17 24 39 / 0.14);
@@ -77,7 +77,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .btn svg { width: 14px; height: 14px; transition: transform .2s; }
 .btn:hover svg { transform: translate(2px, -2px); }
-.btn-primary { background: var(--terracota-profundo); color: #000; font-weight: 600; text-shadow: none; }
+.btn-primary { background: var(--terracota-profundo); color: var(--negro); font-weight: 500; text-shadow: none; -webkit-font-smoothing: antialiased; }
 .btn-primary:hover { background: var(--btn-hover); }
 .btn-ghost { padding-inline: 0; color: var(--tinta); }
 .btn-ghost:hover { color: var(--terracota-hover); }

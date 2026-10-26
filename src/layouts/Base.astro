@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { u } from '../lib/url';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 const { title, description } = Astro.props;
 const url = new URL(Astro.url.pathname, Astro.site);
 const ld = { '@context': 'https://schema.org', '@type': ['Dentist', 'MedicalBusiness'], name: 'ARMODENT', description, url: Astro.site?.toString(), image: new URL('/og.jpg', Astro.site).toString(), slogan: 'Tu sonrisa. Tu esencia. En armonía.' };
@@ -14,10 +15,10 @@ const ld = { '@context': 'https://schema.org', '@type': ['Dentist', 'MedicalBusi
     <meta name="description" content={description} />
     <meta name="theme-color" content="#fedecc" />
     <link rel="canonical" href={url} />
-    <link rel="icon" href={u('/favicon.ico') + '?v=2'} sizes="48x48" />
-    <link rel="icon" href={u('/favicon.svg') + '?v=2'} type="image/svg+xml" />
-    <link rel="apple-touch-icon" href={u('/apple-touch-icon.png') + '?v=2'} />
-    <link rel="manifest" href={u('/site.webmanifest') + '?v=2'} />
+    <link rel="icon" href={u('/favicon.ico') + '?v=3'} sizes="48x48" />
+    <link rel="icon" href={u('/favicon.svg') + '?v=3'} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={u('/apple-touch-icon.png') + '?v=3'} />
+    <link rel="manifest" href={u('/site.webmanifest') + '?v=3'} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_CL" />
     <meta property="og:title" content={title} />
@@ -30,6 +31,7 @@ const ld = { '@context': 'https://schema.org', '@type': ['Dentist', 'MedicalBusi
   <body>
     <a href="#contenido" class="sr-only">Saltar al contenido</a>
     <slot />
+    <WhatsAppFloat />
     <script>
       const els = document.querySelectorAll('.reveal');
       const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.12 });
