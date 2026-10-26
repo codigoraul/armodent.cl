@@ -14,6 +14,6 @@ export const equipo: Profesional[] = [
     cargo: 'Directora de la Clínica',
     areas: ['Odontología general', 'Implantología', 'Medicina estética facial'],
     bio: 'Odontóloga de la Universidad Mayor. Dirige ARMODENT y trabaja en odontología general, implantología y medicina estética facial.',
-    // foto: 'constanza-figueroa.jpg',   // pendiente: foto vertical sobre fondo neutro
+    foto: 'constanza-figueroa.jpg',
   },
 ];

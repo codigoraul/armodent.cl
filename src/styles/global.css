@@ -5,27 +5,27 @@
 @import '@fontsource/libre-caslon-text/400-italic.css';
 
 :root {
-  /* Paleta "Rosa y calidez" */
-  --rosa-nude: #e8c5b8;
-  --blanco-rosado: #f7ede9;
-  --rosa-palido: #d4a89a;
-  --beige-arena: #debe9e;
-  --rosa-cobre: #b8897d;
-  --terracota: #c4746a;
+  /* Paleta oficial Armodent: base #111827 + rosa #FFBEC7 + duraznos (con mezclas de blanco) */
+  --rosa-nude: #fdd8c8;      /* claro 50% (FAB190) */
+  --blanco-rosado: #fff7f4;  /* velo 90% */
+  --rosa-palido: #fedecc;    /* durazno claro (sin rosa en fondos) */
+  --beige-arena: #fbc5ac;    /* suave 25% (FAB190) */
+  --rosa-cobre: #f3a382;     /* durazno profundo */
+  --terracota: #f3a382;
 
   /* Derivados para contraste y superficies */
-  --fondo: #fdf6f3;
-  --nude-suave: #f3dfd6;
-  --nude-hero: #efd3c8;
-  --tinta: #3a2a26;
+  --fondo: #fff8f5;
+  --nude-suave: #ffefe6;
+  --nude-hero: #fedecc;
+  --tinta: #111827;
   --negro: #111827; /* negro del logo: títulos */
-  --tinta-suave: #523a33;
-  --cobre-texto: #8a4b40;
-  --terracota-profundo: #cc8791; /* botones: texto blanco, contraste AA */
-  --btn-hover: #bd7580;
-  --terracota-hover: #96594e;
-  --cafe-oscuro: #4a3330;
-  --linea: rgb(138 90 79 / 0.22);
+  --tinta-suave: #4d525d;
+  --cobre-texto: #111827;
+  --terracota-profundo: #fab190; /* botones: durazno, texto negro (contraste AAA) */
+  --btn-hover: #f3a382;
+  --terracota-hover: #4d525d;
+  --cafe-oscuro: #111827;
+  --linea: rgb(17 24 39 / 0.14);
 
   /* Big Caslon es fuente de sistema en macOS/iOS; Libre Caslon Text la reemplaza en el resto */
   /* Escala tipográfica: cada nivel tiene mínimo y máximo claros */
@@ -55,13 +55,13 @@ a { color: inherit; text-decoration: none; }
 h1, h2, h3, h4 { font-family: var(--f-titulo); font-weight: 400; line-height: 1.12; letter-spacing: -0.012em; margin: 0; color: var(--negro); text-wrap: balance; }
 p { margin: 0; }
 ul { margin: 0; padding: 0; list-style: none; }
-:focus-visible { outline: 2px solid var(--terracota); outline-offset: 3px; border-radius: 3px; }
+:focus-visible { outline: 2px solid var(--negro); outline-offset: 3px; border-radius: 3px; }
 
 .wrap { width: 100%; max-width: calc(var(--max) + var(--gutter) * 2); margin-inline: auto; padding-inline: var(--gutter); }
 .eyebrow { font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cobre-texto); font-weight: 600; }
 .section { padding-block: clamp(64px, 9vw, 120px); }
 .section-title { font-size: var(--fs-h2); max-width: 36ch; }
-.section-dark { background: #2a1d1a; color: #eadbd4; }
+.section-dark { background: #2a1d1a; color: #fedecc; }
 .section-dark .eyebrow { color: var(--rosa-nude); }
 .section-dark .section-title, .section-dark h2 { color: var(--blanco-rosado); }
 .section-dark .lede { color: #d9c6bd; }
@@ -77,14 +77,14 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .btn svg { width: 14px; height: 14px; transition: transform .2s; }
 .btn:hover svg { transform: translate(2px, -2px); }
-.btn-primary { background: var(--terracota-profundo); color: #fff; font-weight: 600; text-shadow: 0 1px 2px rgb(130 60 70 / .35); }
+.btn-primary { background: var(--terracota-profundo); color: #000; font-weight: 600; text-shadow: none; }
 .btn-primary:hover { background: var(--btn-hover); }
 .btn-ghost { padding-inline: 0; color: var(--tinta); }
 .btn-ghost:hover { color: var(--terracota-hover); }
 .btn-outline { border-color: var(--tinta); color: var(--tinta); }
 .btn-outline:hover { background: var(--tinta); color: var(--blanco-rosado); }
-.btn-dark { background: #1f1715; border-color: var(--rosa-cobre); color: var(--rosa-nude); font-weight: 500; }
-.btn-dark:hover { background: #3a2926; color: #fff; }
+.btn-dark { background: #111827; border-color: var(--rosa-cobre); color: var(--rosa-nude); font-weight: 500; }
+.btn-dark:hover { background: #111827; color: #fff; }
 .btn-light { background: var(--blanco-rosado); color: var(--cafe-oscuro); }
 .btn-light:hover { background: #fff; }
 
@@ -95,13 +95,13 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* Hero oscuro sobre foto de clínica */
 .dark-hero { color: #f1e4de; }
-.dark-hero h1 { color: #fff8f4 !important; }
-.dark-hero h1 em { color: var(--rosa-palido) !important; }
+.dark-hero h1 { color: #fff8f5 !important; }
+.dark-hero h1 em { color: #fab190 !important; }
 .dark-hero .eyebrow { color: var(--rosa-nude) !important; }
-.dark-hero .lede, .dark-hero .lead, .dark-hero .mini { color: #eadbd4 !important; }
+.dark-hero .lede, .dark-hero .lead, .dark-hero .mini { color: #fedecc !important; }
 .dark-hero .crumbs, .dark-hero .crumbs a { color: #e3d2cb !important; }
 .dark-hero .crumbs a:hover { color: #fff !important; }
-.dark-hero .btn-primary { background: #fbf1ec; color: var(--tinta); text-shadow: none; }
+.dark-hero .btn-primary { background: #fff7f4; color: var(--tinta); text-shadow: none; }
 .dark-hero .btn-primary:hover { background: #fff; }
 .dark-hero .btn-ghost { padding-inline: 26px; border-color: var(--rosa-nude); color: var(--rosa-nude); }
 .dark-hero .btn-ghost:hover { background: var(--rosa-nude); color: var(--tinta); }

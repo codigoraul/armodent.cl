@@ -15,7 +15,7 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
 <footer class="footer">
   <div class="wrap grid">
     <div class="marca">
-      <img src={u('/logo-armodent.svg')} alt="Armodent — Odontología y estética facial" width="281" height="59" />
+      <img src={u('/logo-armodent-footer.svg')} alt="Armodent — Odontología y estética facial" width="126" height="92" />
       <p class="lema">Salud, bienestar y armonía.<br />Sin dejar de ser tú.</p>
       <a href={agenda} class="reservar" {...ext}>Reservar mi primera cita <span aria-hidden="true">→</span></a>
     </div>
@@ -53,17 +53,17 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
 </div>
 </footer>
 <style>
-  .footer { position: relative; background: linear-gradient(180deg, #f8eee9 0%, #f1e1d8 100%); padding-top: clamp(56px, 7vw, 96px); color: var(--tinta); }
+  .footer { position: relative; background: linear-gradient(180deg, #fff7f4 0%, #fedecc 100%); padding-top: clamp(56px, 7vw, 96px); color: var(--tinta); }
   .footer::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 1px; background: linear-gradient(90deg, transparent, var(--rosa-cobre) 20%, var(--rosa-cobre) 80%, transparent); opacity: .55; }
   .grid { display: grid; grid-template-columns: 1.5fr 0.8fr 1fr 1fr; gap: clamp(28px, 4vw, 56px); padding-bottom: clamp(40px, 5vw, 64px); }
-  .marca img { height: 59px; width: auto; }
+  .marca img { width: 126px; max-width: 100%; height: auto; }
   .lema { font: italic 400 1.4rem/1.35 var(--f-titulo); color: var(--tinta); margin-top: 24px; max-width: 24ch; }
   .reservar { display: inline-flex; gap: 8px; align-items: center; margin-top: 22px; font-size: 14.5px; font-weight: 500; color: var(--cobre-texto); border-bottom: 1px solid currentColor; padding-bottom: 3px; }
   .reservar:hover { color: var(--tinta); }
   h4 { margin-bottom: 18px; color: var(--cobre-texto); font-family: var(--f-texto); font-size: 11.5px; letter-spacing: .18em; }
   ul { display: grid; gap: 11px; font-size: 15.5px; color: var(--tinta); }
   li a { transition: color .2s; } li a:hover { color: var(--cobre-texto); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
-  .legal { border-top: 1px solid rgb(138 75 64 / 0.2); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 24px; font-size: 13px; color: var(--tinta-suave); }
+  .legal { border-top: 1px solid rgb(17 24 39 / 0.2); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 24px; font-size: 13px; color: var(--tinta-suave); }
   .credito a { color: var(--cobre-texto); }
   .legal a:hover { color: var(--cobre-texto); text-decoration: underline; }
   @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } .marca { grid-column: 1 / -1; } }
