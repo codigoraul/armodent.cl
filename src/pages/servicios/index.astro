@@ -1,7 +1,6 @@
 ---
 import Page from '../../layouts/Page.astro';
 import PageHero from '../../components/PageHero.astro';
-import Icon from '../../components/Icon.astro';
 import ServicioCard from '../../components/ServicioCard.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { getServicios } from '../../lib/wp';
@@ -20,40 +19,22 @@ const todos = await getServicios();
     <div class="wrap">
       <ol class="lista" id="lista-servicios">
         {todos.map((s, i) => (
-          <li class:list={['reveal', { extra: i >= 8 }]}>
+          <li class="reveal">
             <ServicioCard s={s} n={i + 1} />
           </li>
         ))}
       </ol>
-      {todos.length > 8 && (
-        <div class="mas">
-          <button type="button" class="btn btn-outline" id="ver-mas" aria-expanded="false" aria-controls="lista-servicios">Ver más especialidades <Icon name="plus" size={14} /></button>
-        </div>
-      )}
-      <noscript><style is:inline set:html=".extra{display:list-item!important}.mas{display:none}"></style></noscript>
       <p class="nota">La indicación de cada tratamiento requiere una evaluación clínica individual.</p>
     </div>
   </section>
   <CtaBand titulo="¿No sabes por dónde empezar?<br />Te orientamos." texto="Cuéntanos qué te preocupa y te ayudamos a elegir el primer paso." />
 </Page>
 
-<script>
-  const btn = document.getElementById('ver-mas');
-  const lista = document.getElementById('lista-servicios');
-  btn?.addEventListener('click', () => {
-    lista?.classList.add('open');
-    btn.setAttribute('aria-expanded', 'true');
-    btn.parentElement?.remove();
-    lista?.querySelectorAll('.extra .reveal, .extra').forEach((el) => el.classList.add('in'));
-  });
-</script>
 
 <style>
-  .lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2vw, 28px); }
-  .lista li { list-style: none; }
-  .lista:not(.open) .extra { display: none; }
-  .mas { display: flex; justify-content: center; margin-top: 40px; }
+  .lista { --gap: clamp(16px, 2vw, 28px); list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); }
+  .lista li { list-style: none; flex: 0 0 calc((100% - 3 * var(--gap)) / 4); max-width: calc((100% - 3 * var(--gap)) / 4); }
   .nota { margin-top: 32px; font-size: 14px; color: var(--tinta-suave); }
-  @media (max-width: 900px) { .lista { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 520px) { .lista { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .lista li { flex-basis: calc((100% - var(--gap)) / 2); max-width: calc((100% - var(--gap)) / 2); } }
+  @media (max-width: 520px) { .lista li { flex-basis: 100%; max-width: 100%; } }
 </style>

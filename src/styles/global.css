@@ -84,7 +84,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .btn-outline { border-color: var(--tinta); color: var(--tinta); }
 .btn-outline:hover { background: var(--tinta); color: var(--blanco-rosado); }
 .btn-dark { background: #111827; border-color: var(--rosa-cobre); color: var(--rosa-nude); font-weight: 500; }
-.btn-dark:hover { background: #111827; color: #fff; }
+.btn-dark:hover { background: #fdbd99; border-color: #fdbd99; color: var(--negro); }
 .btn-light { background: var(--blanco-rosado); color: var(--cafe-oscuro); }
 .btn-light:hover { background: #fff; }
 

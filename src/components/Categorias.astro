@@ -10,7 +10,7 @@ const visibles = todos.slice(0, 8);
   <ol class="lista">
     {visibles.map((s, i) => <li class="reveal"><ServicioCard s={s} n={i + 1} /></li>)}
   </ol>
-  <div class="mas">
+  <div class="mas" style="display:flex;justify-content:center;margin-top:40px">
     <a href={u('/servicios/')} class="btn btn-dark">Ver todas las especialidades <Icon name="arrow" size={14} /></a>
   </div>
 </div>

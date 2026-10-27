@@ -31,7 +31,9 @@ const pairs = (v: unknown) => lines(v).map((l) => { const [a, ...b] = l.split('|
 export const getServicios = memo(async (): Promise<Servicio[]> => {
   const data = await wp<any[]>('/wp/v2/servicio?per_page=50&_embed=wp:featuredmedia');
   const imagenes = new Map<string, string>((data ?? []).map((p) => [p.slug, p._embedded?.['wp:featuredmedia']?.[0]?.source_url] as [string, string]));
-  return fbServicios.map((s) => ({ ...s, image: imagenes.get(s.slug) || undefined }));
+  return fbServicios
+    .map((s) => ({ ...s, image: imagenes.get(s.slug) || undefined }))
+    .sort((a, b) => a.title.localeCompare(b.title, 'es', { sensitivity: 'base' })); // orden alfabético en todo el sitio
 });
 
 export const getFaqs = memo(async (): Promise<Faq[]> => {

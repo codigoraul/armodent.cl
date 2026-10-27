@@ -1,6 +1,7 @@
 ---
 import Icon from './Icon.astro';
-import { getAjustes, getServicios, contactEndpoint } from '../lib/wp';
+import { getAjustes, getServicios } from '../lib/wp';
+import { u } from '../lib/url';
 import { waLink, telLink, mapaQuery } from '../lib/contact';
 const a = await getAjustes();
 const servicios = await getServicios();
@@ -24,7 +25,7 @@ const comoLlegar = a.direccion ? `https://www.google.com/maps/search/?api=1&quer
     </header>
 
     <div class:list={['duo', { solo: !mapa }]}>
-      <form class="form reveal" id="form-contacto" novalidate data-endpoint={contactEndpoint}>
+      <form class="form reveal" id="form-contacto" novalidate data-endpoint={u('/enviar.php')}>
         <div class="form-head"><h3>Solicita tu cita</h3></div>
         <div class="row">
           <label>Nombre<input name="nombre" type="text" autocomplete="name" placeholder="Tu nombre" required /></label>
