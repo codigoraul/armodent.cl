@@ -291,6 +291,6 @@ export const ajustes: Ajustes = {
   whatsapp: '+56 9 3468 9968',
   email: 'contacto@armodent.cl',
   horario: 'Lunes a Viernes de 9:30 a 18:30 hrs. · Sábados de 10:00 a 14:00 hrs.',
-  instagram: '',   // pendiente: el cliente está creando las cuentas
+  instagram: 'https://www.instagram.com/armodent.cl/',
   facebook: '',
 };

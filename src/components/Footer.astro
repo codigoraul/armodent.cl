@@ -37,11 +37,12 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
       <div>
         <h4 class="eyebrow">Contacto</h4>
         <ul class="datos">
-          {a.direccion && <li>{a.direccion}</li>}
-          {a.horario && <li>{a.horario}</li>}
-          {a.telefono && <li><a href={tel}>{a.telefono}</a></li>}
-          {a.whatsapp && <li><a href={wa} target="_blank" rel="noopener">WhatsApp</a></li>}
-          {a.email && <li><a href={`mailto:${a.email}`}>{a.email}</a></li>}
+          {a.direccion && <li style="display:flex;flex-direction:row;align-items:flex-start;gap:12px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ico" style="flex:none;display:block;margin-top:3px"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span style="flex:1;min-width:0">{a.direccion}</span></li>}
+          {a.horario && <li style="display:flex;flex-direction:row;align-items:flex-start;gap:12px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ico" style="flex:none;display:block;margin-top:3px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span style="flex:1;min-width:0">{a.horario.split(' · ').map((h) => <span class="linea" style="display:block">{h}</span>)}</span></li>}
+          {a.telefono && <li style="display:flex;flex-direction:row;align-items:flex-start;gap:12px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ico" style="flex:none;display:block;margin-top:3px"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><a href={tel}>{a.telefono}</a></li>}
+          {a.whatsapp && <li style="display:flex;flex-direction:row;align-items:flex-start;gap:12px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ico" style="flex:none;display:block;margin-top:3px"><path d="M3 21l1.6-4.8A8.5 8.5 0 1 1 8 19.5L3 21z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a3.5 3.5 0 0 1-1.6-1.6l.8-1-1-2L9 9.5z"/></svg><a href={wa} target="_blank" rel="noopener">WhatsApp</a></li>}
+          {a.instagram && <li style="display:flex;flex-direction:row;align-items:flex-start;gap:12px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ico" style="flex:none;display:block;margin-top:3px"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg><a href={a.instagram} target="_blank" rel="noopener">Instagram</a></li>}
+          {a.email && <li style="display:flex;flex-direction:row;align-items:flex-start;gap:12px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="ico" style="flex:none;display:block;margin-top:3px"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6.5L20.5 7"/></svg><a href={`mailto:${a.email}`}>{a.email}</a></li>}
         </ul>
       </div>
     )}
@@ -55,13 +56,16 @@ const hayContacto = a.direccion || a.telefono || a.whatsapp || a.horario || a.em
 <style>
   .footer { position: relative; background: linear-gradient(180deg, #fff7f4 0%, #fedecc 100%); padding-top: clamp(56px, 7vw, 96px); color: var(--tinta); }
   .footer::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 1px; background: linear-gradient(90deg, transparent, var(--rosa-cobre) 20%, var(--rosa-cobre) 80%, transparent); opacity: .55; }
-  .grid { display: grid; grid-template-columns: 1.5fr 0.8fr 1fr 1fr; gap: clamp(28px, 4vw, 56px); padding-bottom: clamp(40px, 5vw, 64px); }
+  .grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.5fr) minmax(0, 0.75fr) minmax(320px, 1.9fr); gap: clamp(28px, 4vw, 56px); padding-bottom: clamp(40px, 5vw, 64px); }
   .marca img { width: 126px; max-width: 100%; height: auto; }
   .lema { font: italic 400 1.4rem/1.35 var(--f-titulo); color: var(--tinta); margin-top: 24px; max-width: 24ch; }
   .reservar { display: inline-flex; gap: 8px; align-items: center; margin-top: 22px; font-size: 14.5px; font-weight: 500; color: var(--cobre-texto); border-bottom: 1px solid currentColor; padding-bottom: 3px; }
   .reservar:hover { color: var(--tinta); }
   h4 { margin-bottom: 18px; color: var(--cobre-texto); font-family: var(--f-texto); font-size: 11.5px; letter-spacing: .18em; }
   ul { display: grid; gap: 11px; font-size: 15.5px; color: var(--tinta); }
+  .datos li { display: flex; align-items: flex-start; gap: 12px; }
+  .datos .ico { flex: none; margin-top: 3px; color: var(--cobre-texto); }
+  .linea { display: block; }
   li a { transition: color .2s; } li a:hover { color: var(--cobre-texto); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
   .legal { border-top: 1px solid rgb(17 24 39 / 0.2); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 24px; font-size: 13px; color: var(--tinta-suave); }
   .credito a { color: var(--cobre-texto); }

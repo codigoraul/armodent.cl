@@ -22,10 +22,8 @@ const nav = [
   <div class="wrap topbar-in">
     <p>Un espacio para tu salud, tu sonrisa y tu bienestar</p>
     <div class="topbar-right">
-      {tel && <a href={tel} class="tb-item"><Icon name="phone" size={13} /> {aj.telefono}</a>}
-      {wa && <a href={wa} class="tb-item" target="_blank" rel="noopener">WhatsApp</a>}
-      {redes.map((r) => <a href={r.h} class="tb-item" target="_blank" rel="noopener">{r.l}</a>)}
-      <a href={u('/contacto/')} class="tb-cta">Hablemos de tu próxima visita <Icon name="arrow" size={11} /></a>
+      {tel && <a href={tel} class="tb-item"><Icon name="phone" size={16} /> {aj.telefono}</a>}
+      {redes.map((r) => <a href={r.h} class="tb-item" target="_blank" rel="noopener">{r.l === 'Instagram' ? <Fragment set:html={`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.500" y="3.500" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.800"/><circle cx="17.200" cy="6.800" r=".6" fill="currentColor"/></svg>`} /> : <Fragment set:html={`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 8.500h2.500V5H14a3.500 3.500 0 0 0-3.500 3.500V11H8v3.500h2.500V21H14v-6.500h2.500L17 11h-3V8.500Z"/></svg>`} />} {r.l}</a>)}
     </div>
   </div>
 </div>

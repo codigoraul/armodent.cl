@@ -13,8 +13,8 @@ const datos = [
   { icon: 'clock', t: 'Horario de atención', v: a.horario || 'Días y horarios · por confirmar' },
   ...(a.email ? [{ icon: 'mail', t: 'Correo electrónico', v: a.email, href: `mailto:${a.email}` }] : []),
 ];
-const mapa = a.direccion ? `https://www.google.com/maps?q=${mapaQuery(a)}&hl=es&z=16&output=embed` : '';
-const comoLlegar = a.direccion ? `https://www.google.com/maps/search/?api=1&query=${mapaQuery(a)}` : '';
+const mapa = 'https://www.google.com/maps?q=-33.4513764,-70.5703238&hl=es&z=17&output=embed';
+const comoLlegar = 'https://maps.app.goo.gl/j94isyXC4BxbA4bV9';
 ---
 <section class="section contacto" id="formulario">
   <div class="wrap">
