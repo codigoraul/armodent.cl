@@ -30,10 +30,16 @@ const pairs = (v: unknown) => lines(v).map((l) => { const [a, ...b] = l.split('|
 // WordPress solo aporta, si existe un servicio con el mismo slug, su imagen destacada.
 export const getServicios = memo(async (): Promise<Servicio[]> => {
   const data = await wp<any[]>('/wp/v2/servicio?per_page=50&_embed=wp:featuredmedia');
-  const imagenes = new Map<string, string>((data ?? []).map((p) => [p.slug, p._embedded?.['wp:featuredmedia']?.[0]?.source_url] as [string, string]));
+  const wpPorSlug = new Map<string, any>((data ?? []).map((p) => [p.slug, p]));
   return fbServicios
-    .map((s) => ({ ...s, image: imagenes.get(s.slug) || undefined }))
-    .sort((a, b) => a.title.localeCompare(b.title, 'es', { sensitivity: 'base' })); // orden alfabético en todo el sitio
+    .map((s) => {
+      const p = wpPorSlug.get(s.slug);
+      return { ...s, image: p?._embedded?.['wp:featuredmedia']?.[0]?.source_url || undefined, orden: Number(p?.menu_order) || 0 };
+    })
+    // Orden definido en WordPress (campo "Orden" del servicio, de menor a mayor).
+    // Si no hay orden asignado (todos en 0) o hay empates, queda alfabético.
+    .sort((a, b) => a.orden - b.orden || a.title.localeCompare(b.title, 'es', { sensitivity: 'base' }))
+    .map(({ orden, ...s }) => s);
 });
 
 export const getFaqs = memo(async (): Promise<Faq[]> => {

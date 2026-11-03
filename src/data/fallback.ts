@@ -286,7 +286,7 @@ export const faqs: Faq[] = [
 
 // Datos de contacto entregados por el cliente. Lo que se complete en WordPress (Ajustes > Armodent) tiene prioridad.
 export const ajustes: Ajustes = {
-  direccion: 'Av. Ossa 235, Of. 845',
+  direccion: 'Av. Ossa 235, Of. 845, La Reina, Santiago',
   telefono: '+56 9 3468 9968',
   whatsapp: '+56 9 3468 9968',
   email: 'contacto@armodent.cl',
