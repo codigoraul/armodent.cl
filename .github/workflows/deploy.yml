@@ -4,6 +4,14 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:
+    types: [wp-update]
+
+# Un solo despliegue a la vez: si llegan varios cambios seguidos,
+# termina el actual y corre solo el último pendiente.
+concurrency:
+  group: deploy-armodent
+  cancel-in-progress: false
 
 permissions:
   contents: read
