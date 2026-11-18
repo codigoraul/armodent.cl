@@ -26,18 +26,28 @@ const decode = (s: string) =>
 const lines = (v: unknown) => String(v ?? '').split('\n').map((x) => x.trim()).filter(Boolean);
 const pairs = (v: unknown) => lines(v).map((l) => { const [a, ...b] = l.split('|'); return [a.trim(), b.join('|').trim()] as const; }).filter(([a, b]) => a && b);
 
-// Los textos, el orden y los nombres de los servicios viven en src/data/fallback.ts (validados con el cliente).
-// WordPress solo aporta, si existe un servicio con el mismo slug, su imagen destacada.
+// Los textos y nombres de los servicios viven en src/data/fallback.ts (validados con el cliente).
+// WordPress aporta el ORDEN (campo "Orden" / arrastrar en la lista) y la imagen destacada.
+// Algunos servicios tienen en WordPress un slug distinto al del sitio: se aceptan ambos.
+const SLUGS_WP: Record<string, string[]> = {
+  'estetica-facial': ['medicina-estetica'],
+  'ttm-dolor-orofacial': ['ttm-trastornos-temporomandibulares'],
+};
+
 export const getServicios = memo(async (): Promise<Servicio[]> => {
-  const data = await wp<any[]>('/wp/v2/servicio?per_page=50&_embed=wp:featuredmedia');
+  const data = await wp<any[]>('/wp/v2/servicio?per_page=50&orderby=menu_order&order=asc&_embed=wp:featuredmedia');
   const wpPorSlug = new Map<string, any>((data ?? []).map((p) => [p.slug, p]));
   return fbServicios
     .map((s) => {
-      const p = wpPorSlug.get(s.slug);
-      return { ...s, image: p?._embedded?.['wp:featuredmedia']?.[0]?.source_url || undefined, orden: Number(p?.menu_order) || 0 };
+      const p = [s.slug, ...(SLUGS_WP[s.slug] ?? [])].map((k) => wpPorSlug.get(k)).find(Boolean);
+      return {
+        ...s,
+        image: p?._embedded?.['wp:featuredmedia']?.[0]?.source_url || undefined,
+        // Sin equivalente en WordPress: al final (no adelante)
+        orden: p ? Number(p.menu_order) || 0 : Number.MAX_SAFE_INTEGER,
+      };
     })
-    // Orden definido en WordPress (campo "Orden" del servicio, de menor a mayor).
-    // Si no hay orden asignado (todos en 0) o hay empates, queda alfabético.
+    // Orden definido en WordPress, de menor a mayor; empates en orden alfabético.
     .sort((a, b) => a.orden - b.orden || a.title.localeCompare(b.title, 'es', { sensitivity: 'base' }))
     .map(({ orden, ...s }) => s);
 });

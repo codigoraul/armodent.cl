@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 const { s, todos } = Astro.props;
 const img = s.image ?? imagenDeServicio(s.slug).src;
 ---
-<Page title={`${s.title} · ARMODENT`} description={s.excerpt} current="servicios">
+<Page title={`${s.title} en La Reina · ARMODENT`} description={s.excerpt} current="servicios">
     <section class="hero dark-hero">
       <HeroBg />
       <div class="wrap grid">
@@ -41,7 +41,7 @@ const img = s.image ?? imagenDeServicio(s.slug).src;
           <p class="aviso">La información de esta página es orientativa y no reemplaza una evaluación clínica. La indicación de cada tratamiento requiere una valoración individual.</p>
         </article>
         <aside class="lateral">
-          <div class="foto"><Media src={img} alt="" sizes="(max-width: 900px) 90vw, 560px" /></div>
+          <div class="foto"><Media src={img} alt={`${s.title} en ARMODENT, La Reina`} sizes="(max-width: 900px) 90vw, 560px" /></div>
           <div class="box">
             <p class="eyebrow">Especialidades y servicios</p>
             <ul>

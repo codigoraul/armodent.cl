@@ -2,9 +2,39 @@
 import '../styles/global.css';
 import { u } from '../lib/url';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { getAjustes } from '../lib/wp';
 const { title, description } = Astro.props;
 const url = new URL(Astro.url.pathname, Astro.site);
-const ld = { '@context': 'https://schema.org', '@type': ['Dentist', 'MedicalBusiness'], name: 'ARMODENT', description, url: Astro.site?.toString(), image: new URL('/og.jpg', Astro.site).toString(), slogan: 'Tu sonrisa. Tu esencia. En armonía.' };
+const a = await getAjustes();
+const site = Astro.site?.toString() ?? 'https://armodent.cl/';
+// Datos estructurados para SEO local (La Reina, Santiago)
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': ['Dentist', 'MedicalBusiness'],
+  '@id': site + '#clinica',
+  name: 'ARMODENT',
+  alternateName: 'ARMODENT Odontología y Estética Facial',
+  description: 'Clínica de odontología y estética facial en La Reina, Santiago.',
+  url: site,
+  logo: new URL('/logo-armodent.svg', Astro.site).toString(),
+  image: new URL('/og.jpg', Astro.site).toString(),
+  slogan: 'Tu sonrisa. Tu esencia. En armonía.',
+  telephone: a.telefono || undefined,
+  email: a.email || undefined,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: a.direccion.split(',').slice(0, 2).join(',').trim(),
+    addressLocality: 'La Reina',
+    addressRegion: 'Región Metropolitana',
+    addressCountry: 'CL',
+  },
+  areaServed: [{ '@type': 'City', name: 'La Reina' }, { '@type': 'City', name: 'Santiago' }],
+  openingHoursSpecification: [
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '09:30', closes: '18:30' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '10:00', closes: '14:00' },
+  ],
+  sameAs: [a.instagram, a.facebook].filter(Boolean),
+};
 ---
 <!doctype html>
 <html lang="es-CL">
@@ -13,6 +43,9 @@ const ld = { '@context': 'https://schema.org', '@type': ['Dentist', 'MedicalBusi
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="geo.region" content="CL-RM" />
+    <meta name="geo.placename" content="La Reina, Santiago" />
     <meta name="theme-color" content="#fedecc" />
     <link rel="canonical" href={url} />
     <link rel="icon" href={u('/favicon.ico') + '?v=3'} sizes="48x48" />
@@ -21,10 +54,14 @@ const ld = { '@context': 'https://schema.org', '@type': ['Dentist', 'MedicalBusi
     <link rel="manifest" href={u('/site.webmanifest') + '?v=3'} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_CL" />
+    <meta property="og:site_name" content="ARMODENT" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={url} />
     <meta property="og:image" content={new URL('/og.jpg', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ARMODENT, odontología y estética facial en La Reina" />
     <meta name="twitter:card" content="summary_large_image" />
     <script type="application/ld+json" set:html={JSON.stringify(ld)} />
   </head>

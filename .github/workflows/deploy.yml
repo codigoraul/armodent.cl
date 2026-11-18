@@ -1,9 +1,10 @@
-name: Deploy a armodent.cl/prueba
+name: Deploy a armodent.cl
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Lo dispara WordPress (plugin Armodent Headless) al crear, editar, borrar o reordenar contenido
   repository_dispatch:
     types: [wp-update]
 
@@ -29,29 +30,25 @@ jobs:
 
       - run: npm ci
 
-      - name: Build (base /prueba)
+      - name: Build (producción, raíz del dominio)
         run: npm run build
         env:
           PUBLIC_WP_URL: https://armodent.cl/admin
-          DEPLOY_BASE: /prueba
 
-      - name: .htaccess (HTTPS + evitar indexación de /prueba)
+      # /prueba deja de usarse: todo lo que entre ahí se redirige (301) al sitio principal
+      - name: Redirección de /prueba al sitio principal
         run: |
-          cat > dist/.htaccess <<'HTACCESS'
-          # Forzar HTTPS
+          mkdir -p redir-prueba
+          cat > redir-prueba/.htaccess <<'HTACCESS'
           <IfModule mod_rewrite.c>
             RewriteEngine On
-            RewriteCond %{HTTPS} !=on
-            RewriteCond %{HTTP:X-Forwarded-Proto} !https
-            RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-          </IfModule>
-
-          # No indexar /prueba
-          <IfModule mod_headers.c>
-            Header set X-Robots-Tag "noindex, nofollow"
+            RewriteRule ^(.*)$ https://armodent.cl/$1 [R=301,L]
           </IfModule>
           HTACCESS
 
+      # IMPORTANTE: en la raíz NO se usa --delete (borraría WordPress en /admin, cgi-bin, .well-known, etc.)
+      # y no se sube .htaccess (el de la raíz lo administra cPanel).
+      # Solo la carpeta de assets /_astro se sincroniza con --delete para no acumular archivos viejos.
       - name: Subir por FTP (lftp)
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
@@ -68,6 +65,7 @@ jobs:
           set ftp:passive-mode true;
           set mirror:parallel-directories false;
           open -u \"$FTP_USERNAME\",\"$FTP_PASSWORD\" \"$FTP_SERVER\";
-          mkdir -p -f /prueba;
-          mirror -R --delete --parallel=1 --verbose dist/ /prueba/;
+          mirror -R --parallel=1 --verbose --exclude-glob .htaccess --exclude-glob _astro/ dist/ /;
+          mirror -R --delete --parallel=1 --verbose dist/_astro/ /_astro/;
+          mirror -R --parallel=1 --verbose redir-prueba/ /prueba/;
           "
