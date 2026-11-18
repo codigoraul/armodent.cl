@@ -7,7 +7,7 @@ import Categorias from '../components/Categorias.astro';
 import Faqs from '../components/Faqs.astro';
 import CtaBand from '../components/CtaBand.astro';
 import HeroSlider from '../components/HeroSlider.astro';
-import clinica from '../assets/clinica.jpg';
+import clinica from '../assets/recepcion-arco.jpg';
 import estetica from '../assets/estetica-facial.jpg';
 import { u } from '../lib/url';
 
@@ -40,7 +40,7 @@ const pasos = [
 
   <section class="clinica">
     <div class="wrap cgrid">
-      <div class="foto reveal"><div class="arch"><Media src={clinica} alt="Recepción de la clínica, con muro beige y mostrador de mármol" sizes="(max-width: 900px) 90vw, 480px" /></div></div>
+      <div class="foto reveal"><div class="arch"><Media src={clinica} alt="Recepción de ARMODENT, con el logo iluminado y el mesón de atención" sizes="(max-width: 900px) 90vw, 480px" /></div></div>
       <div class="txt reveal">
         <p class="eyebrow">Nuestra forma de cuidar</p>
         <h2 class="section-title">Un espacio que ya se siente cálido.</h2>
@@ -91,7 +91,7 @@ const pasos = [
   .cgrid { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(32px, 7vw, 110px); align-items: center; }
   .arch { aspect-ratio: .84; max-width: 480px; border-radius: 999px 999px 10px 10px; overflow: hidden; background: var(--rosa-nude); }
   .arch :global(img) { width: 100%; height: 100%; object-fit: cover; }
-  .clinica .arch :global(img) { object-position: 12% 50%; }
+  .clinica .arch :global(img) { object-position: 50% 50%; }
   .txt { display: grid; gap: 22px; max-width: 56ch; } .txt > p { color: var(--tinta-suave); }
   .princ { display: grid; gap: 0; margin: 4px 0 8px; }
   .princ li { display: flex; gap: 20px; align-items: baseline; padding: 16px 0; border-top: 1px solid var(--linea); }
